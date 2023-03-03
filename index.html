@@ -1,4 +1,28 @@
-this is index.html
-more stuff
-something else
-hell yeah
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App</title>
+  <style>
+    li {
+      color: red;
+      background-color: rebeccapurple;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to the Weather App</h1>
+  <h2>This app displays the current weather conditions for 50 cities worldwide</h2>
+  <p>
+    Instructions: Select a city from the dropdown menu below and click "Submit" to see the weather resutls
+  </p>
+  <select name="citySelect" id="citySelect">
+    <option value="choose" disabled>Please choose a city</option>
+  </select>
+  <button type="submit" id="submit">Submit</button>
+  <ul id="weatherStats" class="weatherStats">
+  </ul>
+</body>
+</html>
