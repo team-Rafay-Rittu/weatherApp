@@ -19,7 +19,7 @@ weatherApp.getCities = () => {
         })
         .then((jsonResult) => {
             console.log(jsonResult);
-            
+
             //store the jsonResult (which contains all the API data) in the weatherApp object
             weatherApp.weatherData = jsonResult;
 
@@ -56,6 +56,7 @@ weatherApp.getCities = () => {
     
 }
 
+// ** SUBMIT BUTTON EVENT LISTENER ** //
 
 //target the "Submit" button
 weatherApp.submitButton = document.querySelector('#submit');
@@ -66,19 +67,44 @@ weatherApp.submitButton.addEventListener('click', function(){
     //find out which city user has selected
     weatherApp.userCity = weatherApp.dropDown.value;
 
+    //call the display weather stats function
+    weatherApp.displayWeatherStats(weatherApp.userCity);
+  
+});
+
+// ** RANDOM BUTTON EVENT LISTENER ** //
+
+// target the 'randon' button
+weatherApp.randomButton = document.querySelector('#random');
+
+// create an event listener
+weatherApp.randomButton.addEventListener('click', function () {
+
+    // regenerate a random number to select a random city
+    weatherApp.randomNum = Math.floor(Math.random() * 50);
+
+    //  saved random city
+    weatherApp.randomCity = weatherApp.weatherData[weatherApp.randomNum].EnglishName;
+
+    //call the display weather stats function
+    weatherApp.displayWeatherStats(weatherApp.randomCity);
+
+}); 
+
+//this function will display the weather stats for the users selected city
+weatherApp.displayWeatherStats = (passedCity) => {
+
     //loop through the weatherData to find weather data for users city
     //get user City's weather data
     weatherApp.weatherData.forEach(city => {
-        if(weatherApp.userCity === city.EnglishName) {
+        if (passedCity === city.EnglishName) {
 
-         
-            
             //get the city's temperature and the unit unit (C or F)
             weatherApp.currentTemp = `${city.Temperature.Metric.Value} ${city.Temperature.Metric.Unit}`;
-            
+
             //get the city's weather Text
             weatherApp.currentWeatherText = city.WeatherText;
-            
+
             //get the city's precipitation type if it has precipitation
             if (city.PrecipitationType !== null) {
                 weatherApp.currentPrecipitation = city.PrecipitationType;
@@ -86,16 +112,10 @@ weatherApp.submitButton.addEventListener('click', function(){
                 weatherApp.currentPrecipitation = "";
             }
             // add name of city to h3
-            weatherApp.showCity.innerText = city.EnglishName; 
+            weatherApp.showCity.innerText = city.EnglishName;
 
-            //call the display weather stats function
-            weatherApp.displayWeatherStats();
         }
     });
-});
-
-//this function will display the weather stats for the users selected city
-weatherApp.displayWeatherStats = () => {
     
     //target the ul
     weatherApp.ul = document.querySelector('#weatherStats');
