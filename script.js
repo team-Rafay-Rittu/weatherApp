@@ -7,52 +7,122 @@ weatherApp.apiKey = "DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy"
 
 // Make the api call & get the data for the top 50 cities.
 weatherApp.getCities = () => {
-    const url = new URL(weatherApp.apiUrl);
-    url.search = new URLSearchParams({
+    weatherApp.url = new URL(weatherApp.apiUrl);
+    weatherApp.url.search = new URLSearchParams({
         apikey: weatherApp.apiKey
-
-
     });
 
-    fetch(url)
+    fetch(weatherApp.url)
         .then((response) => {
             console.log(response);
             return response.json()
         })
         .then((jsonResult) => {
-            // console.log(jsonResult);
+            console.log(jsonResult);
+            //store the jsonResult (which contains all the API data) in the weatherApp object
+            weatherApp.weatherData = jsonResult;
             // create an empty array
-        
-            // retrive data from the array of object, property "EnglishName
+            weatherApp.cityNames = [];
+
+            // retrive data from the array of object, property "EnglishName"
             jsonResult.forEach(object => {
                 // then add each city name to the array
-                // console.log(object.EnglishName)
+                weatherApp.cityNames.push(object.EnglishName);
+            });
+
+            //sort the city names by alphabet
+            weatherApp.cityNames.sort();
+
+            //populate the select element with city names alphabetically using weatherApp.cityNames array
+            weatherApp.cityNames.forEach(city => {                
                 // create child element for city
-                const city = document.createElement('option');
-                city.setAttribute('value', object.EnglishName);
+                const cityElement = document.createElement('option');
+                cityElement.setAttribute('value', city);
+                
                 // add city name to the option element
-                city.innerText = object.EnglishName;
-                // target parent element
-                const parentSelect = document.querySelector('select');
-               // append child to select parent element
-                parentSelect.appendChild(city);
-               });
-            })
+                cityElement.innerText = city;
+
+                // append child to select parent Select element
+                weatherApp.dropDown.appendChild(cityElement);
+            });
+            
+        });
     
 }
 
-
-
-   // create an init method
+// create an init method
 weatherApp.init = () => {
-    weatherApp.getCities()
+    //call the getCities function to populate the dropdown menu with all the city names
+    weatherApp.getCities();
+
+    // target Select element
+    weatherApp.dropDown = document.querySelector('select');
+
+    //target the "Submit" button
+    weatherApp.submitButton = document.querySelector('#submit');
 };
  
    
-weatherApp.init(); // call the init method
- 
+// call the init method
+weatherApp.init();
 
+//add event listener to the "Submit" button
+weatherApp.submitButton.addEventListener('click', function(){
+    //find out which city user has selected
+    weatherApp.userCity = weatherApp.dropDown.value;
+
+    //loop through the weatherData to find weather data for users city
+    weatherApp.weatherData.forEach(city => {
+        if(weatherApp.userCity === city.EnglishName) {
+            //get user City's weather data
             
+            //get the city's temperature and the unit unit (C or F)
+            weatherApp.currentTemp = `${city.Temperature.Metric.Value} ${city.Temperature.Metric.Unit}`;
+            
+            //get the city's weather Text
+            weatherApp.currentWeatherText = city.WeatherText;
+            
+            //get the city's precipitation type if it has precipitation
+            if (city.PrecipitationType !== null) {
+                weatherApp.currentPrecipitation = city.PrecipitationType;
+            } else {
+                weatherApp.currentPrecipitation = "";
+            }
+            
+            //call the display weather stats function
+            weatherApp.displayWeatherStats();
+        }
+    });
+});
+
+//this function will display the weather stats for the users selected city
+weatherApp.displayWeatherStats = () => {
+    //target the ul
+    weatherApp.ul = document.querySelector('#weatherStats');
+    
+    //clear the ul
+    weatherApp.ul.innerHTML = "";
+    
+    //create child li elements
+    weatherApp.tempLi = document.createElement('li')
+    weatherApp.weatherTextLi = document.createElement('li')
+    weatherApp.precipitationLi = document.createElement('li')
+    
+    //add class attribute to each li element
+    weatherApp.tempLi.setAttribute('class', 'tempLi');
+    weatherApp.weatherTextLi.setAttribute('class', 'weatherTextLi');
+    weatherApp.precipitationLi.setAttribute('class', 'precipitationLi');
+    
+    //add the weather data to the list elements
+    weatherApp.tempLi.innerText = weatherApp.currentTemp;
+    weatherApp.weatherTextLi.innerText = weatherApp.currentWeatherText;
+    weatherApp.precipitationLi.innerText = weatherApp.currentPrecipitation;
+    
+    //append the li elements to the ul
+    weatherApp.ul.appendChild(weatherApp.tempLi);
+    weatherApp.ul.appendChild(weatherApp.weatherTextLi);
+    weatherApp.ul.appendChild(weatherApp.precipitationLi);
+}
             
             // create a drop menu
             // instructions for the user to select the city and click the submit button (add an event listener).
