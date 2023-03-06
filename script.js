@@ -19,13 +19,16 @@ weatherApp.getCities = () => {
         })
         .then((jsonResult) => {
             console.log(jsonResult);
+
             //store the jsonResult (which contains all the API data) in the weatherApp object
             weatherApp.weatherData = jsonResult;
+
             // create an empty array
             weatherApp.cityNames = [];
 
             // retrive data from the array of object, property "EnglishName"
             jsonResult.forEach(object => {
+
                 // then add each city name to the array
                 weatherApp.cityNames.push(object.EnglishName);
             });
@@ -34,9 +37,12 @@ weatherApp.getCities = () => {
             weatherApp.cityNames.sort();
 
             //populate the select element with city names alphabetically using weatherApp.cityNames array
-            weatherApp.cityNames.forEach(city => {                
+            weatherApp.cityNames.forEach(city => { 
+
                 // create child element for city
                 const cityElement = document.createElement('option');
+
+                // created a class value so later we cann the user has selected the city 
                 cityElement.setAttribute('value', city);
                 
                 // add city name to the option element
@@ -50,53 +56,67 @@ weatherApp.getCities = () => {
     
 }
 
-// create an init method
-weatherApp.init = () => {
-    //call the getCities function to populate the dropdown menu with all the city names
-    weatherApp.getCities();
+// ** SUBMIT BUTTON EVENT LISTENER ** //
 
-    // target Select element
-    weatherApp.dropDown = document.querySelector('select');
-
-    //target the "Submit" button
-    weatherApp.submitButton = document.querySelector('#submit');
-};
- 
-   
-// call the init method
-weatherApp.init();
+//target the "Submit" button
+weatherApp.submitButton = document.querySelector('#submit');
 
 //add event listener to the "Submit" button
 weatherApp.submitButton.addEventListener('click', function(){
+
     //find out which city user has selected
     weatherApp.userCity = weatherApp.dropDown.value;
 
+    //call the display weather stats function
+    weatherApp.displayWeatherStats(weatherApp.userCity);
+  
+});
+
+// ** RANDOM BUTTON EVENT LISTENER ** //
+
+// target the 'randon' button
+weatherApp.randomButton = document.querySelector('#random');
+
+// create an event listener
+weatherApp.randomButton.addEventListener('click', function () {
+
+    // regenerate a random number to select a random city
+    weatherApp.randomNum = Math.floor(Math.random() * 50);
+
+    //  saved random city
+    weatherApp.randomCity = weatherApp.weatherData[weatherApp.randomNum].EnglishName;
+
+    //call the display weather stats function
+    weatherApp.displayWeatherStats(weatherApp.randomCity);
+
+}); 
+
+//this function will display the weather stats for the users selected city
+weatherApp.displayWeatherStats = (passedCity) => {
+
     //loop through the weatherData to find weather data for users city
+    //get user City's weather data
     weatherApp.weatherData.forEach(city => {
-        if(weatherApp.userCity === city.EnglishName) {
-            //get user City's weather data
-            
+        if (passedCity === city.EnglishName) {
+
             //get the city's temperature and the unit unit (C or F)
             weatherApp.currentTemp = `${city.Temperature.Metric.Value} ${city.Temperature.Metric.Unit}`;
-            
+
             //get the city's weather Text
             weatherApp.currentWeatherText = city.WeatherText;
-            
+
             //get the city's precipitation type if it has precipitation
             if (city.PrecipitationType !== null) {
                 weatherApp.currentPrecipitation = city.PrecipitationType;
             } else {
                 weatherApp.currentPrecipitation = "";
             }
-            
-            //call the display weather stats function
-            weatherApp.displayWeatherStats();
+            // add name of city to h3
+            weatherApp.showCity.innerText = city.EnglishName;
+
         }
     });
-});
-
-//this function will display the weather stats for the users selected city
-weatherApp.displayWeatherStats = () => {
+    
     //target the ul
     weatherApp.ul = document.querySelector('#weatherStats');
     
@@ -124,11 +144,22 @@ weatherApp.displayWeatherStats = () => {
     weatherApp.ul.appendChild(weatherApp.precipitationLi);
 }
             
-            // create a drop menu
-            // instructions for the user to select the city and click the submit button (add an event listener).
-            // when the user clicks we get what city he has selected
-            // go through the api data to display the temperature in celsius, weather text, has precipation and type of precipitation below the display button
-            // if the user selects another city, the data below will cleared and new data will appear of the weather conditions of that chosen city
+// create an init method
+weatherApp.init = () => {
+
+    //call the getCities function to populate the dropdown menu with all the city names
+    weatherApp.getCities();
+
+    // target Select element
+    weatherApp.dropDown = document.querySelector('select');
+
+    // targeting the h3 element which will display the city name
+    weatherApp.showCity = document.querySelector('#cityName')
+};
+
+// call the init method
+weatherApp.init();
+
          
 
           
