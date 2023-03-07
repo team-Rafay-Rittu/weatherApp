@@ -102,6 +102,10 @@ weatherApp.displayWeatherStats = (passedCity) => {
             //get the city's temperature and the unit unit (C or F)
             weatherApp.currentTemp = `${city.Temperature.Metric.Value} ${city.Temperature.Metric.Unit}`;
 
+            // Rittu's new line get the city's temperature in unit F and store it in variable to be used later
+            weatherApp.fahrenheit = `${city.Temperature.Imperial.Value} ${city.Temperature.Imperial.Unit}`;
+            console.log(weatherApp.fahrenheit);
+
             //get the city's weather Text
             weatherApp.currentWeatherText = city.WeatherText;
 
@@ -142,6 +146,43 @@ weatherApp.displayWeatherStats = (passedCity) => {
     weatherApp.ul.appendChild(weatherApp.tempLi);
     weatherApp.ul.appendChild(weatherApp.weatherTextLi);
     weatherApp.ul.appendChild(weatherApp.precipitationLi);
+
+    // ** stretch goal - create option for user to convert celsuis to fahrenheit
+    // stored fahrenheight value from object in variable earlier
+
+    // Target the document body
+    weatherApp.body = document.querySelector('body');
+    // create a button to convert celsius to fahrenheit
+    weatherApp.convertButton = document.createElement('button');
+
+    // add a class & Id attribute, & text to the convertButton
+    weatherApp.convertButton.setAttribute('class', 'convert');
+    weatherApp.convertButton.setAttribute('id', 'convert');
+    weatherApp.convertButton.innerText = "Convert to F";
+
+    // append convert button to parent element (body)
+    weatherApp.body.appendChild(weatherApp.convertButton);
+
+    // add an event listener when user clicks on the convert button and 
+    // run a function that converts the temp to fahrenheit
+    weatherApp.convertButton.addEventListener('click', function (convert) {
+        // console.log('clicked');
+
+        //  target parent node
+        weatherApp.body = document.querySelector('body');
+
+        //  create paragraph element to display to the temp in F
+        weatherApp.paraFahrenheit = document.createElement('p');
+
+        //  add fahrenheit value and unit to the p element
+        weatherApp.paraFahrenheit.innerText = weatherApp.fahrenheit;
+
+        // display the fahrenheit temp on the DOM
+        weatherApp.body.appendChild(weatherApp.paraFahrenheit);
+
+        // Replace the content inside the paragraph element when the user selects another city
+
+    });
 }
             
 // create an init method
