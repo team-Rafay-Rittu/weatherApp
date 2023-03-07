@@ -180,7 +180,10 @@ weatherApp.displayWeatherStats = (passedCity) => {
         // display the fahrenheit temp on the DOM
         weatherApp.body.appendChild(weatherApp.paraFahrenheit);
 
-        // Replace the content inside the paragraph element when the user selects another city
+        // remove the convertButton from the parent node (body)
+        weatherApp.body.removeChild(weatherApp.convertButton);
+
+        // clear the content inside the paragraph element when the user selects another city
 
     });
 }
