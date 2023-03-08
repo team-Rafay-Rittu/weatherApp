@@ -124,6 +124,11 @@ weatherApp.displayWeatherStats = (passedCity) => {
             // add name of city to h3
             weatherApp.showCity.innerText = city.EnglishName;
 
+            //get the city's country ID
+            weatherApp.countryId = city.Country.ID;
+
+            //get the city's country name
+            weatherApp.countryName = city.Country.EnglishName;
         }
     });
     
@@ -153,6 +158,7 @@ weatherApp.displayWeatherStats = (passedCity) => {
     weatherApp.ul.appendChild(weatherApp.weatherTextLi);
     weatherApp.ul.appendChild(weatherApp.precipitationLi);
 
+
     // create a button to convert celsius to fahrenheit
     weatherApp.convertButton = document.createElement('button');
 
@@ -181,6 +187,17 @@ weatherApp.displayWeatherStats = (passedCity) => {
         weatherApp.div.removeChild(weatherApp.convertButton);
        
     });
+
+    //create img element for country flag
+    weatherApp.flag = document.createElement('img')
+    //set the src of the img element
+    weatherApp.flag.setAttribute('src', `https://flagsapi.com/${weatherApp.countryId}/shiny/64.png`)
+    //set the alt text of the img element
+    weatherApp.flag.setAttribute('alt', `Flag of ${weatherApp.countryName}`)
+
+    //append the img element to the h3
+    weatherApp.showCity.appendChild(weatherApp.flag);
+
 }
             
 // create an init method
