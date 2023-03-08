@@ -67,8 +67,11 @@ weatherApp.submitButton.addEventListener('click', function(){
     //find out which city user has selected
     weatherApp.userCity = weatherApp.dropDown.value;
 
+    //clear the conversion div when user selects new city
+    weatherApp.div.innerHTML = "";
+
     //call the display weather stats function
-    weatherApp.displayWeatherStats(weatherApp.userCity);
+    weatherApp.displayWeatherStats(weatherApp.userCity); 
   
 });
 
@@ -85,6 +88,9 @@ weatherApp.randomButton.addEventListener('click', function () {
 
     //  saved random city
     weatherApp.randomCity = weatherApp.weatherData[weatherApp.randomNum].EnglishName;
+
+    // clear diversion div when user selects new city
+    weatherApp.div.innerHTML = "";
 
     //call the display weather stats function
     weatherApp.displayWeatherStats(weatherApp.randomCity);
@@ -147,11 +153,6 @@ weatherApp.displayWeatherStats = (passedCity) => {
     weatherApp.ul.appendChild(weatherApp.weatherTextLi);
     weatherApp.ul.appendChild(weatherApp.precipitationLi);
 
-    // ** stretch goal - create option for user to convert celsuis to fahrenheit
-    // stored fahrenheight value from object in variable earlier
-
-    // Target the document body
-    weatherApp.body = document.querySelector('body');
     // create a button to convert celsius to fahrenheit
     weatherApp.convertButton = document.createElement('button');
 
@@ -161,16 +162,12 @@ weatherApp.displayWeatherStats = (passedCity) => {
     weatherApp.convertButton.innerText = "Convert to F";
 
     // append convert button to parent element (body)
-    weatherApp.body.appendChild(weatherApp.convertButton);
+    weatherApp.div.appendChild(weatherApp.convertButton);
 
     // add an event listener when user clicks on the convert button and 
     // run a function that converts the temp to fahrenheit
     weatherApp.convertButton.addEventListener('click', function (convert) {
-        // console.log('clicked');
-
-        //  target parent node
-        weatherApp.body = document.querySelector('body');
-
+    
         //  create paragraph element to display to the temp in F
         weatherApp.paraFahrenheit = document.createElement('p');
 
@@ -178,13 +175,11 @@ weatherApp.displayWeatherStats = (passedCity) => {
         weatherApp.paraFahrenheit.innerText = weatherApp.fahrenheit;
 
         // display the fahrenheit temp on the DOM
-        weatherApp.body.appendChild(weatherApp.paraFahrenheit);
+        weatherApp.div.appendChild(weatherApp.paraFahrenheit);
 
         // remove the convertButton from the parent node (body)
-        weatherApp.body.removeChild(weatherApp.convertButton);
-
-        // clear the content inside the paragraph element when the user selects another city
-
+        weatherApp.div.removeChild(weatherApp.convertButton);
+       
     });
 }
             
@@ -198,7 +193,11 @@ weatherApp.init = () => {
     weatherApp.dropDown = document.querySelector('select');
 
     // targeting the h3 element which will display the city name
-    weatherApp.showCity = document.querySelector('#cityName')
+    weatherApp.showCity = document.querySelector('#cityName') 
+    
+    // Target the div
+    weatherApp.div = document.querySelector('#conversion');
+
 };
 
 // call the init method
