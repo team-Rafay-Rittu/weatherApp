@@ -67,8 +67,11 @@ weatherApp.submitButton.addEventListener('click', function(){
     //find out which city user has selected
     weatherApp.userCity = weatherApp.dropDown.value;
 
+    //clear the conversion div when user selects new city
+    weatherApp.div.innerHTML = "";
+
     //call the display weather stats function
-    weatherApp.displayWeatherStats(weatherApp.userCity);
+    weatherApp.displayWeatherStats(weatherApp.userCity); 
   
 });
 
@@ -86,6 +89,9 @@ weatherApp.randomButton.addEventListener('click', function () {
     //  saved random city
     weatherApp.randomCity = weatherApp.weatherData[weatherApp.randomNum].EnglishName;
 
+    // clear diversion div when user selects new city
+    weatherApp.div.innerHTML = "";
+
     //call the display weather stats function
     weatherApp.displayWeatherStats(weatherApp.randomCity);
 
@@ -101,6 +107,10 @@ weatherApp.displayWeatherStats = (passedCity) => {
 
             //get the city's temperature and the unit unit (C or F)
             weatherApp.currentTemp = `${city.Temperature.Metric.Value} ${city.Temperature.Metric.Unit}`;
+
+            // Rittu's new line get the city's temperature in unit F and store it in variable to be used later
+            weatherApp.fahrenheit = `${city.Temperature.Imperial.Value} ${city.Temperature.Imperial.Unit}`;
+            console.log(weatherApp.fahrenheit);
 
             //get the city's weather Text
             weatherApp.currentWeatherText = city.WeatherText;
@@ -148,6 +158,36 @@ weatherApp.displayWeatherStats = (passedCity) => {
     weatherApp.ul.appendChild(weatherApp.weatherTextLi);
     weatherApp.ul.appendChild(weatherApp.precipitationLi);
 
+
+    // create a button to convert celsius to fahrenheit
+    weatherApp.convertButton = document.createElement('button');
+
+    // add a class & Id attribute, & text to the convertButton
+    weatherApp.convertButton.setAttribute('class', 'convert');
+    weatherApp.convertButton.setAttribute('id', 'convert');
+    weatherApp.convertButton.innerText = "Convert to F";
+
+    // append convert button to parent element (body)
+    weatherApp.div.appendChild(weatherApp.convertButton);
+
+    // add an event listener when user clicks on the convert button and 
+    // run a function that converts the temp to fahrenheit
+    weatherApp.convertButton.addEventListener('click', function (convert) {
+    
+        //  create paragraph element to display to the temp in F
+        weatherApp.paraFahrenheit = document.createElement('p');
+
+        //  add fahrenheit value and unit to the p element
+        weatherApp.paraFahrenheit.innerText = weatherApp.fahrenheit;
+
+        // display the fahrenheit temp on the DOM
+        weatherApp.div.appendChild(weatherApp.paraFahrenheit);
+
+        // remove the convertButton from the parent node (body)
+        weatherApp.div.removeChild(weatherApp.convertButton);
+       
+    });
+
     //create img element for country flag
     weatherApp.flag = document.createElement('img')
     //set the src of the img element
@@ -157,6 +197,7 @@ weatherApp.displayWeatherStats = (passedCity) => {
 
     //append the img element to the h3
     weatherApp.showCity.appendChild(weatherApp.flag);
+
 }
             
 // create an init method
@@ -169,7 +210,11 @@ weatherApp.init = () => {
     weatherApp.dropDown = document.querySelector('select');
 
     // targeting the h3 element which will display the city name
-    weatherApp.showCity = document.querySelector('#cityName')
+    weatherApp.showCity = document.querySelector('#cityName') 
+    
+    // Target the div
+    weatherApp.div = document.querySelector('#conversion');
+
 };
 
 // call the init method
