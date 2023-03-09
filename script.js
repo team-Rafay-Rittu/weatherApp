@@ -1,6 +1,24 @@
   // create a weather app object
 const weatherApp = {};
 
+weatherApp.icons = {
+    cloudy: {
+        description:`Cloudy`,
+        symbol:`./assets/icons8-cloud-30.png`,
+        altText: `cloud icon`
+    },
+    rain: {
+        description:`Rain`,
+        symbol:`./assets/icon8-rainy-weather-30.png`,
+        altText: `rain icon`
+    },
+    sun: {
+        description:`Sunny`,
+        symbol: `./assets/icon8-sun-star-48.png`,
+        altText: `sun icon`
+    }
+};
+
 // obtain the api url & api key save in the weather object
 weatherApp.apiUrl = "http://dataservice.accuweather.com/currentconditions/v1/topcities/50";
 weatherApp.apiKey = "DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy"
@@ -14,14 +32,12 @@ weatherApp.getCities = () => {
 
     fetch(weatherApp.url)
         .then((response) => {
-            console.log(response);
             return response.json()
         })
         .then((jsonResult) => {
-            console.log(jsonResult);
-
             //store the jsonResult (which contains all the API data) in the weatherApp object
             weatherApp.weatherData = jsonResult;
+            console.log(jsonResult);
 
             // create an empty array
             weatherApp.cityNames = [];
@@ -110,10 +126,14 @@ weatherApp.displayWeatherStats = (passedCity) => {
 
             // Rittu's new line get the city's temperature in unit F and store it in variable to be used later
             weatherApp.fahrenheit = `${city.Temperature.Imperial.Value} ${city.Temperature.Imperial.Unit}`;
-            console.log(weatherApp.fahrenheit);
 
             //get the city's weather Text
             weatherApp.currentWeatherText = city.WeatherText;
+            if (weatherApp.currentWeatherText === 'Cloudy' || weatherApp.currentWeatherText === 'Partly cloudy' || weatherApp.currentWeatherText === 'Mostly cloudy') {
+                weatherApp.displayIconSource = weatherApp.icons.cloudy.symbol
+                weatherApp.displayIconAlt = weatherApp.icons.cloudy.altText
+            }
+
 
             //get the city's precipitation type if it has precipitation
             if (city.PrecipitationType !== null) {
@@ -142,11 +162,16 @@ weatherApp.displayWeatherStats = (passedCity) => {
     weatherApp.tempLi = document.createElement('li')
     weatherApp.weatherTextLi = document.createElement('li')
     weatherApp.precipitationLi = document.createElement('li')
+    // create li element for weather icon
+    weatherApp.displayIcon = document.createElement('img')
     
     //add class attribute to each li element
     weatherApp.tempLi.setAttribute('class', 'tempLi');
     weatherApp.weatherTextLi.setAttribute('class', 'weatherTextLi');
     weatherApp.precipitationLi.setAttribute('class', 'precipitationLi');
+    // create src and alt attribute to the li element for the weather icons 
+    weatherApp.displayIcon.setAttribute('src', `${weatherApp.displayIconSource}`)
+    weatherApp.displayIcon.setAttribute('alt', `${weatherApp.displayIconAlt}`)
     
     //add the weather data to the list elements
     weatherApp.tempLi.innerText = weatherApp.currentTemp;
@@ -157,6 +182,7 @@ weatherApp.displayWeatherStats = (passedCity) => {
     weatherApp.ul.appendChild(weatherApp.tempLi);
     weatherApp.ul.appendChild(weatherApp.weatherTextLi);
     weatherApp.ul.appendChild(weatherApp.precipitationLi);
+    weatherApp.precipitationLi.appendChild(weatherApp.displayIcon);
 
 
     // create a button to convert celsius to fahrenheit
