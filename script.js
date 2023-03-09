@@ -14,12 +14,9 @@ weatherApp.getCities = () => {
 
     fetch(weatherApp.url)
         .then((response) => {
-            console.log(response);
             return response.json()
         })
         .then((jsonResult) => {
-            console.log(jsonResult);
-
             //store the jsonResult (which contains all the API data) in the weatherApp object
             weatherApp.weatherData = jsonResult;
 
@@ -110,7 +107,6 @@ weatherApp.displayWeatherStats = (passedCity) => {
 
             // Rittu's new line get the city's temperature in unit F and store it in variable to be used later
             weatherApp.fahrenheit = `${city.Temperature.Imperial.Value} ${city.Temperature.Imperial.Unit}`;
-            console.log(weatherApp.fahrenheit);
 
             //get the city's weather Text
             weatherApp.currentWeatherText = city.WeatherText;
