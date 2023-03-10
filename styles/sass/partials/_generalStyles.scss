@@ -1,6 +1,6 @@
 .wrapper {
   margin: 0 auto;
-  width: 95%;
+  width: 90%;
   max-width: 1200px;
 }
 
@@ -29,16 +29,18 @@ h1 {
 
 h2 {
   margin: 0;
-  padding-top: 30px;
+  padding: 30px 0;
 }
 
-p {
-  padding: 30px 5px 0 0;
+.instructions {
+  padding: 30px 0;
+  padding-top: 40px;
 }
 
 .citySelectFlex {
   display: flex;
   flex-wrap: wrap;
+  padding-bottom: 40px;
 }
 
 button {
@@ -53,8 +55,10 @@ button {
 select {
   width: 70%;
   margin: 0 auto;
+  margin-bottom: 20px;
   padding: 10px 10px;
   border-radius: 15px;
+  border: none;
 }
 
 ul {
@@ -66,8 +70,8 @@ ul {
 }
 
 li {
-  margin: 10px;
-  height: 80px;
+  margin: 7px;
+  height: 100px;
   width: calc(100% / 3);
   color: black;
   background-color: #85aab6;
@@ -76,4 +80,16 @@ li {
   display: flex;
   align-items: center;
   justify-content: center;
+  // padding: 10px;
+}
+
+footer {
+  background-color: #28455e;
+}
+
+footer p {
+  margin: 0;
+  padding: 10px 0;
+  text-align: center;
+  color: white;
 }
