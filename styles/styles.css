@@ -226,7 +226,135 @@ html {
   overflow: hidden;
 }
 
+body,
+button,
+select {
+  text-align: center;
+  font-family: "Comfortaa", cursive;
+  font-weight: 400;
+}
+
+h1 {
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-size: 36px;
+}
+
+h2 {
+  font-family: "Manrope", sans-serif;
+}
+
+h2,
+p,
+button,
 li {
+  font-weight: 400;
+}
+
+p {
+  text-align: left;
+  line-height: 1.5;
+}
+
+.wrapper {
+  margin: 0 auto;
+  width: 95%;
+  max-width: 1200px;
+}
+
+header {
+  background-image: url("../assets/bgImage1.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 50vh;
+}
+
+.flexHeading {
+  height: 50vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+h1 {
+  margin: 0 0 30px 0;
+}
+
+.gradient {
+  background: -webkit-gradient(linear, left top, left bottom, from(#43839F), color-stop(25%), to(#FAEEDE));
+  background: linear-gradient(#43839F, 25%, #FAEEDE);
+}
+
+h2 {
+  margin: 0;
+  padding-top: 30px;
+}
+
+p {
+  padding: 30px 5px 0 0;
+}
+
+.citySelectFlex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+button {
+  width: calc(50% - 12px);
+  margin: 20px 5px;
+  border: none;
+  border-radius: 30px;
+  -webkit-box-shadow: 14px 14px 10px -1px rgba(71, 74, 64, 0.7);
+          box-shadow: 14px 14px 10px -1px rgba(71, 74, 64, 0.7);
+  padding: 10px 10px;
+}
+
+select {
+  width: 70%;
+  margin: 0 auto;
+  padding: 10px 10px;
+  border-radius: 15px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+li {
+  margin: 10px;
+  height: 80px;
+  width: 33.3333333333%;
   color: black;
-  background-color: lightblue;
+  background-color: #85aab6;
+  border-radius: 30px;
+  -webkit-box-shadow: 14px 14px 10px -1px rgba(71, 74, 64, 0.7);
+          box-shadow: 14px 14px 10px -1px rgba(71, 74, 64, 0.7);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
