@@ -6,22 +6,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weather App</title>
   <link rel="stylesheet" href="./styles/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Manrope:wght@500&family=Tilt+Neon&display=swap" rel="stylesheet">
+
+
 </head>
 <body>
-  <h1>Welcome to the Weather App</h1>
-  <h2>This app displays the current weather conditions for 50 cities worldwide</h2>
-  <p>
-    Instructions: Select a city from the dropdown menu below and click "Submit" to see the weather resutls
-  </p>
-  <select name="citySelect" id="citySelect">
-    <option value="choose">Please choose a city</option>
-  </select>
-  <button type="submit" id="submit">Submit</button>
-  <button type="submit" id="random" class="random">I'm feeling sunny</button>
-  <h3 id="cityName"></h3>
-  <ul id="weatherStats" class="weatherStats">
-  </ul>
-  <div id="conversion" class="conversion"></div>
+  
+  <header>
+    <div class="wrapper flexHeading">
+      <h1>Welcome to the Weather App</h1>
+    </div>
+  </header>
+ 
+  <main>
+    <div class="wrapper">
+      <h2>This app displays the current weather conditions for 50 cities worldwide</h2>
+    </div>
+    <div class="gradient">
+      <div class="wrapper">
+        <p class="instructions"> 
+          Select a city from the dropdown menu below and click "Submit" to see the weather results or click on
+          "I'm feeling sunny" to get weather results for a random city.
+        </p>
+
+        <section class="citySelectFlex">
+          <select name="citySelect" id="citySelect">
+            <option value="choose">Please choose a city</option>
+          </select>
+          <button type="submit" id="submit">Submit</button>
+          <button type="submit" id="random" class="random">I'm feeling sunny</button>
+        </section>
+
+        <section class="weatherInfo">
+            <div class="cityFlag">
+              <h3 id="cityName"></h3>
+            </div>
+            <ul id="weatherStats" class="weatherStats"></ul>
+            <div id="conversion" class="conversion"></div>
+          </section>
+        </div>    
+    </div>
+  </main>
+
+  <footer>
+    <p>Made at Juno College</p>
+  </footer>
   <script src="script.js"></script>
 </body>
 </html>

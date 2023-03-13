@@ -1,4 +1,95 @@
- li {
-   color: black;
-   background-color: lightblue;
- }
+.wrapper {
+  margin: 0 auto;
+  width: 90%;
+  max-width: 1200px;
+}
+
+header {
+  background-image: url("../assets/bgImage1.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 50vh;
+}
+
+.flexHeading {
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  margin: 0 0 30px 0;
+}
+
+.gradient{
+  background: linear-gradient(#43839F, 25%, #FAEEDE);
+}
+
+h2 {
+  margin: 0;
+  padding: 30px 0;
+}
+
+.instructions {
+  padding: 30px 0;
+  padding-top: 40px;
+}
+
+.citySelectFlex {
+  display: flex;
+  flex-wrap: wrap;
+  padding-bottom: 40px;
+}
+
+button {
+  width: calc(50% - 12px);
+  margin: 20px 5px;
+  border: none;
+  border-radius: 30px;
+  box-shadow: 14px 14px 10px -1px rgba(71, 74, 64, 0.7);
+  padding: 10px 10px;
+}
+
+select {
+  width: 70%;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  padding: 10px 10px;
+  border-radius: 15px;
+  border: none;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+}
+
+li {
+  margin: 7px;
+  height: 100px;
+  width: calc(100% / 3);
+  color: black;
+  background-color: #85aab6;
+  border-radius: 30px;
+  box-shadow: 14px 14px 10px -1px rgba(71, 74, 64, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // padding: 10px;
+}
+
+footer {
+  background-color: #28455e;
+}
+
+footer p {
+  margin: 0;
+  padding: 10px 0;
+  text-align: center;
+  color: white;
+}
