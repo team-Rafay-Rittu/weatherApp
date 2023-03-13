@@ -19,9 +19,14 @@ weatherApp.icons = {
     },
     partialSun: {
         description: `Partly Sunny`,
-        symbol: `./assets/icons8-partly-cloudy-day.48.png`,
+        symbol: `./assets/icons8-partly-cloudy-day-48.png`,
         altText: `partly sunny and cloudy icon`
     },
+    snow: {
+        description: `snow`,
+        symbol:`./assets/icons8-snow-40.png`,
+        altText: `snow icon`
+    }
 };
 
 // obtain the api url & api key save in the weather object
@@ -138,23 +143,30 @@ weatherApp.displayWeatherStats = (passedCity) => {
                 console.log("it's cloudy!");
                 weatherApp.displayIconSource = weatherApp.icons.cloudy.symbol;
                 weatherApp.displayIconAlt = weatherApp.icons.cloudy.altText;
-                
-            } else if (weatherApp.currentWeatherText === 'Rain' || weatherApp.currentWeatherText === 'Drizzle' || weatherApp.currentWeatherText === 'Light rain')
+
+            } else if (weatherApp.currentWeatherText === 'Rain' || weatherApp.currentWeatherText === 'Drizzle' || weatherApp.currentWeatherText === 'Light rain' || weatherApp.currentWeatherText === 'Showers')
             { 
                 console.log("its raining");
                 weatherApp.displayIconSource = weatherApp.icons.rain.symbol;
                 weatherApp.displayIconAlt = weatherApp.icons.rain.altText;
+
             } else if (weatherApp.currentWeatherText === 'Sunny' || weatherApp.currentWeatherText === 'Clear' || weatherApp.currentWeatherText === 'Mostly Sunny') 
             {
                 console.log("it's sunny");
                 weatherApp.displayIconSource = weatherApp.icons.sun.symbol;
                 weatherApp.displayIconAlt = weatherApp.icons.sun.altText;
+
             } else if (weatherApp.currentWeatherText === 'Partly sunny' || weatherApp.currentWeatherText === 'Clouds and sun')
              {
                 console.log("it's partly sunny");
                 weatherApp.displayIconSource = weatherApp.icons.partialSun.symbol;
                 weatherApp.displayIconAlt = weatherApp.icons.partialSun.altText;
 
+            } else if (weatherApp.currentWeatherText === 'Snowing' || weatherApp.currentWeatherText === 'Sleet' || weatherApp.currentWeatherText === 'Snow showers' || weatherApp.currentWeatherText === 'Snow')
+             {
+                console.log("it's snowing");
+                weatherApp.displayIconSource = weatherApp.icons.snow.symbol;
+                weatherApp.displayIconAlt = weatherApp.icons.snow.altText;
             };
 
 
