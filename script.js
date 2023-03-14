@@ -1,6 +1,8 @@
-  // create a weather app object
+// create a weather app object
 const weatherApp = {};
 
+//creating an api Url for weather data for top 50 cities
+=======
 weatherApp.icons = {
     cloudy: {
         description: [`Cloudy`, `Partly cloudy`, `Mostly cloudy`, `Overcast`],
@@ -31,7 +33,14 @@ weatherApp.icons = {
 
 // obtain the api url & api key save in the weather object
 weatherApp.apiUrl = "http://dataservice.accuweather.com/currentconditions/v1/topcities/50";
+// obtain the api url & api key save in the weather object
 weatherApp.apiKey = "DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy"
+
+
+
+
+
+// ** FUNCTION FOR INITIAL API CALL ** //
 
 // Make the api call & get the data for the top 50 cities.
 weatherApp.getCities = () => {
@@ -45,16 +54,15 @@ weatherApp.getCities = () => {
             return response.json()
         })
         .then((jsonResult) => {
-            //store the jsonResult (which contains all the API data) in the weatherApp object
+            //store the jsonResult (which contains all the weather data) in the weatherApp object
             weatherApp.weatherData = jsonResult;
             console.log(jsonResult);
 
-            // create an empty array
+            // create an empty array for sorting city names by alphabet
             weatherApp.cityNames = [];
 
-            // retrive data from the array of object, property "EnglishName"
+            // loop through the weatherData to store all city names
             jsonResult.forEach(object => {
-
                 // then add each city name to the array
                 weatherApp.cityNames.push(object.EnglishName);
             });
@@ -65,10 +73,10 @@ weatherApp.getCities = () => {
             //populate the select element with city names alphabetically using weatherApp.cityNames array
             weatherApp.cityNames.forEach(city => { 
 
-                // create child element for city
+                // create child option element for city
                 const cityElement = document.createElement('option');
 
-                // created a class value so later we cann the user has selected the city 
+                // created a value attribute and set it to the city name 
                 cityElement.setAttribute('value', city);
                 
                 // add city name to the option element
@@ -77,10 +85,12 @@ weatherApp.getCities = () => {
                 // append child to select parent Select element
                 weatherApp.dropDown.appendChild(cityElement);
             });
-            
         });
-    
 }
+
+
+
+
 
 // ** SUBMIT BUTTON EVENT LISTENER ** //
 
@@ -96,33 +106,40 @@ weatherApp.submitButton.addEventListener('click', function(){
     //clear the conversion div when user selects new city
     weatherApp.div.innerHTML = "";
 
-    //call the display weather stats function
+    //call the display weather stats function with the users selected city
     weatherApp.displayWeatherStats(weatherApp.userCity); 
-  
 });
+
+
+
+
 
 // ** RANDOM BUTTON EVENT LISTENER ** //
 
-// target the 'randon' button
+// target the 'random' button
 weatherApp.randomButton = document.querySelector('#random');
 
 // create an event listener
 weatherApp.randomButton.addEventListener('click', function () {
 
-    // regenerate a random number to select a random city
+    //generate a random number to select a random city
     weatherApp.randomNum = Math.floor(Math.random() * 50);
 
-    //  saved random city
+    //select a random city based on the random number
     weatherApp.randomCity = weatherApp.weatherData[weatherApp.randomNum].EnglishName;
 
-    // clear diversion div when user selects new city
+    // clear conversion div when user selects new city
     weatherApp.div.innerHTML = "";
 
-    //call the display weather stats function
+    //call the display weather stats function with random city
     weatherApp.displayWeatherStats(weatherApp.randomCity);
-
 }); 
 
+
+
+
+
+// ** FUNCTION FOR INITIAL API CALL ** //
 //this function will display the weather stats for the users selected city
 weatherApp.displayWeatherStats = (passedCity) => {
 
@@ -269,8 +286,8 @@ weatherApp.displayWeatherStats = (passedCity) => {
     //set the alt text of the img element
     weatherApp.flag.setAttribute('alt', `Flag of ${weatherApp.countryName}`)
 
-    //append the img element to the h3
-    weatherApp.showCity.appendChild(weatherApp.flag);
+    //append the img element to the cityFlag div
+    weatherApp.cityFlagDiv.appendChild(weatherApp.flag);
 
 }
             
@@ -285,6 +302,9 @@ weatherApp.init = () => {
 
     // targeting the h3 element which will display the city name
     weatherApp.showCity = document.querySelector('#cityName') 
+
+    //targeting the cityFlag div
+    weatherApp.cityFlagDiv = document.querySelector(".cityFlag")
     
     // Target the div
     weatherApp.div = document.querySelector('#conversion');
