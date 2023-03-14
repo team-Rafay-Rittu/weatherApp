@@ -23,7 +23,7 @@ weatherApp.icons = {
 // obtain the api url & api key save in the weather object
 weatherApp.apiUrl = "http://dataservice.accuweather.com/currentconditions/v1/topcities/50";
 // obtain the api url & api key save in the weather object
-weatherApp.apiKey = "DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy"
+weatherApp.apiKey = "iKLTvoFgSq9sc5BKM37ihFtikGNp351H"
 
 
 
@@ -81,6 +81,37 @@ weatherApp.getCities = () => {
 
 
 
+// ** FUNCTION FOR GETTING ALL COUNTRIES weahterApp.getCountries ** //
+weatherApp.getCountries = () => {
+    //get all regions of the world first
+    fetch("http://dataservice.accuweather.com/locations/v1/regions?apikey=DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy")
+        .then((response) => {
+            return response.json();
+        })
+        .then((jsonResult) => {
+                     
+            weatherApp.countryNames = [];
+
+            //loop through the regions to get all countries within that region
+            jsonResult.forEach(region => {
+                fetch(`http://dataservice.accuweather.com/locations/v1/countries/${region.ID}?apikey=DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy`)
+                    .then((res) => {
+                        return res.json()
+                    })
+                        .then((result) => {
+                                                       
+                            //loop through the result to get all countries
+                            result.forEach(country => {
+                                weatherApp.countryNames.push(country.EnglishName)
+                            })
+                        })
+            })
+        })
+}
+// ** weatherApp.getCountries FUNCTION ENDS ** //
+
+
+
 
 // ** SUBMIT BUTTON EVENT LISTENER ** //
 
@@ -95,14 +126,20 @@ weatherApp.submitButton.addEventListener('click', function(){
 
     // clear the cityFlag div when user selects new city
     weatherApp.cityFlagDiv.innerHTML = "";
+
+    weatherApp.moreOptions.style.visibility = "visible";
+    if (weatherApp.citySearchDiv) {
+        weatherApp.citySearchDiv.innerHTML = "";
+    }
+    
     
     //clear the conversion div when user selects new city
     weatherApp.div.innerHTML = "";
 
     //call the display weather stats function with the users selected city
-    weatherApp.displayWeatherStats(weatherApp.userCity); 
+    weatherApp.displayWeatherStats(weatherApp.userCity, weatherApp.weatherData); 
 });
-
+// ** SUBMIT BUTTON EVENT LISTENER ENDS** //
 
 
 
@@ -127,22 +164,107 @@ weatherApp.randomButton.addEventListener('click', function () {
     //clear conversion div when random button is clicked
     weatherApp.div.innerHTML = "";
 
+    weatherApp.moreOptions.style.visibility = "visible";
+     if (weatherApp.citySearchDiv) {
+        weatherApp.citySearchDiv.innerHTML = "";
+    }
     //call the display weather stats function with random city
-    weatherApp.displayWeatherStats(weatherApp.randomCity);
+    weatherApp.displayWeatherStats(weatherApp.randomCity, weatherApp.weatherData);
 }); 
+// ** RANDOM BUTTON EVENT LISTENER ENDS ** //
 
 
+
+// ** MORE OPTIONS BUTTON EVENT LISTENER ** //
+weatherApp.moreOptions = document.querySelector('.moreOptions')
+weatherApp.moreOptions.addEventListener('click', function () {
+    weatherApp.countryNames.sort();
+    weatherApp.moreOptions.style.visibility = "hidden";
+
+    
+    weatherApp.citySearchDiv = document.querySelector('.citySearch');
+    weatherApp.citySearchP = document.createElement('p');
+    weatherApp.citySearchP.innerText = "Please select a country from the dropdown menu and type a name of a city in the search bar to get weather data for any city in the world";
+    weatherApp.citySearchDiv.appendChild(weatherApp.citySearchP);
+    weatherApp.countrySelect = document.createElement('select');
+
+    const cityOptionDefault = document.createElement('option');
+    cityOptionDefault.innerText = "Please choose a country";
+    cityOptionDefault.setAttribute("value", "choose");
+    weatherApp.countrySelect.appendChild(cityOptionDefault);
+    weatherApp.countryNames.forEach(country => {
+        const countryOption = document.createElement('option');
+        countryOption.innerText = country;
+        countryOption.setAttribute("value", country);
+        weatherApp.countrySelect.appendChild(countryOption);
+    })
+    weatherApp.citySearchDiv.appendChild(weatherApp.countrySelect)
+    weatherApp.citySearchLabel = document.createElement('label')
+    weatherApp.citySearchLabel.innerText = "Please enter a city name in the search bar:";
+    weatherApp.citySearchLabel.setAttribute('for', 'citySearchBar');
+    weatherApp.citySearchDiv.appendChild(weatherApp.citySearchLabel);
+
+    weatherApp.citySearchBar = document.createElement('input');
+    weatherApp.citySearchBar.setAttribute('id', "citySearchBar");
+    weatherApp.citySearchBar.setAttribute('type', "text");
+    weatherApp.citySearchBar.setAttribute('placeholder', "City Name");
+    weatherApp.citySearchDiv.appendChild(weatherApp.citySearchBar);
+
+    weatherApp.citySearchButton = document.createElement('button');
+    weatherApp.citySearchButton.setAttribute('id', 'citySearchButton');
+    weatherApp.citySearchButton.innerText = "City Search"
+    weatherApp.citySearchDiv.appendChild(weatherApp.citySearchButton);
+
+
+
+
+    // ** CITY SEARCH BUTTON EVENT LISTENER ** //
+    weatherApp.citySearchButton.addEventListener('click', function () {
+        weatherApp.searchCity(weatherApp.citySearchBar.value, weatherApp.countrySelect.value)
+    })
+    // ** CITY SEARCH BUTTON EVENT LISTENER ENDS ** //
+})
+// ** MORE OPTIONS BUTTON EVENT LISTENER ENDS** //
+
+
+
+// ** FUNCTION FOR SEARCHING FOR A CITY ** //
+weatherApp.searchCity = (city, country) => {
+    console.log(city, country)
+    weatherApp.searchUrl = "http://dataservice.accuweather.com/locations/v1/cities/search";
+
+    weatherApp.citySearchUrl = new URL(weatherApp.searchUrl);
+    weatherApp.citySearchUrl.search = new URLSearchParams({
+        apikey: weatherApp.apiKey,
+        q:`${city} ${country}`
+    });
+
+    fetch(weatherApp.citySearchUrl)
+        .then((response) => {
+            return response.json()
+        })
+            .then((result) => {
+                if (result.length === 0) {
+                    alert("No results found.  Please try again")
+                } else if (result.length === 1) {
+                    console.log('haha')
+                    console.log(result[0].Key)
+                    console.log(typeof(result[0].Key))
+                }
+            })
+
+}
 
 
 
 // ** FUNCTION FOR DISPLAYING WEATHER STATS ** //
 
 //this function will display the weather stats for the users selected city or random city
-weatherApp.displayWeatherStats = (passedCity) => {
+weatherApp.displayWeatherStats = (passedCity, weatherData) => {
 
     //loop through the weatherData to find weather data for users city
     //get user City's weather data
-    weatherApp.weatherData.forEach(city => {
+    weatherData.forEach(city => {
         if (passedCity === city.EnglishName) {
 
             //get the city's temperature and the unit (C or F)
@@ -265,6 +387,9 @@ weatherApp.init = () => {
 
     //call the getCities function to populate the dropdown menu with all the city names
     weatherApp.getCities();
+
+    //call the getCountries function
+    weatherApp.getCountries();
 
     // target Select element
     weatherApp.dropDown = document.querySelector('select');
