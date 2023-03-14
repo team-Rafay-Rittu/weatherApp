@@ -2,7 +2,7 @@
 const weatherApp = {};
 
 //creating an api Url for weather data for top 50 cities
-=======
+
 weatherApp.icons = {
     cloudy: {
         description: [`Cloudy`, `Partly cloudy`, `Mostly cloudy`, `Overcast`],
