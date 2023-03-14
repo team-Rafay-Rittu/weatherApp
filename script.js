@@ -1,8 +1,6 @@
 // create a weather app object
 const weatherApp = {};
 
-//creating an api Url for weather data for top 50 cities
-
 weatherApp.icons = {
     cloudy: {
         description: [`Cloudy`, `Partly cloudy`, `Mostly cloudy`, `Overcast`],
@@ -30,6 +28,8 @@ weatherApp.icons = {
         altText: `snow icon`
     }
 };
+
+//creating an api Url for weather data for top 50 cities
 
 // obtain the api url & api key save in the weather object
 weatherApp.apiUrl = "http://dataservice.accuweather.com/currentconditions/v1/topcities/50";
@@ -73,7 +73,7 @@ weatherApp.getCities = () => {
             //populate the select element with city names alphabetically using weatherApp.cityNames array
             weatherApp.cityNames.forEach(city => { 
 
-                // create child option element for city
+                // create an option element for city
                 const cityElement = document.createElement('option');
 
                 // created a value attribute and set it to the city name 
@@ -82,11 +82,12 @@ weatherApp.getCities = () => {
                 // add city name to the option element
                 cityElement.innerText = city;
 
-                // append child to select parent Select element
+                // append child option element to parent Select element
                 weatherApp.dropDown.appendChild(cityElement);
             });
         });
 }
+// ** weatherApp.getCities FUNCTION ENDS ** //
 
 
 
@@ -103,6 +104,9 @@ weatherApp.submitButton.addEventListener('click', function(){
     //find out which city user has selected
     weatherApp.userCity = weatherApp.dropDown.value;
 
+    // clear the cityFlag div when user selects new city
+    weatherApp.cityFlagDiv.innerHTML = "";
+    
     //clear the conversion div when user selects new city
     weatherApp.div.innerHTML = "";
 
@@ -128,7 +132,10 @@ weatherApp.randomButton.addEventListener('click', function () {
     //select a random city based on the random number
     weatherApp.randomCity = weatherApp.weatherData[weatherApp.randomNum].EnglishName;
 
-    // clear conversion div when user selects new city
+    //clear the cityFlag div when random button is clicked
+    weatherApp.cityFlagDiv.innerHTML = "";
+
+    //clear conversion div when random button is clicked
     weatherApp.div.innerHTML = "";
 
     //call the display weather stats function with random city
@@ -139,8 +146,9 @@ weatherApp.randomButton.addEventListener('click', function () {
 
 
 
-// ** FUNCTION FOR INITIAL API CALL ** //
-//this function will display the weather stats for the users selected city
+// ** FUNCTION FOR DISPLAYING WEATHER STATS ** //
+
+//this function will display the weather stats for the users selected city or random city
 weatherApp.displayWeatherStats = (passedCity) => {
 
     //loop through the weatherData to find weather data for users city
@@ -148,7 +156,7 @@ weatherApp.displayWeatherStats = (passedCity) => {
     weatherApp.weatherData.forEach(city => {
         if (passedCity === city.EnglishName) {
 
-            //get the city's temperature and the unit unit (C or F)
+            //get the city's temperature and the unit (C or F)
             weatherApp.currentTemp = `${city.Temperature.Metric.Value} ${city.Temperature.Metric.Unit}`;
 
             // Rittu's new line get the city's temperature in unit F and store it in variable to be used later
@@ -193,8 +201,8 @@ weatherApp.displayWeatherStats = (passedCity) => {
             } else {
                 weatherApp.currentPrecipitation = "";
             }
-            // add name of city to h3
-            weatherApp.showCity.innerText = city.EnglishName;
+            //get the city name
+            weatherApp.cityName = city.EnglishName;
 
             //get the city's country ID
             weatherApp.countryId = city.Country.ID;
@@ -279,6 +287,7 @@ weatherApp.displayWeatherStats = (passedCity) => {
        
     });
 
+
     //create img element for country flag
     weatherApp.flag = document.createElement('img')
     //set the src of the img element
@@ -288,6 +297,15 @@ weatherApp.displayWeatherStats = (passedCity) => {
 
     //append the img element to the cityFlag div
     weatherApp.cityFlagDiv.appendChild(weatherApp.flag);
+
+     //create a h3 element which will display city name
+    weatherApp.nameOfCity = document.createElement('h3');
+
+    //add the city name inside the h3 element
+    weatherApp.nameOfCity.innerText = weatherApp.cityName;
+
+    //append the h3 element to the cityFlag div
+    weatherApp.cityFlagDiv.appendChild(weatherApp.nameOfCity);
 
 }
             
@@ -299,9 +317,6 @@ weatherApp.init = () => {
 
     // target Select element
     weatherApp.dropDown = document.querySelector('select');
-
-    // targeting the h3 element which will display the city name
-    weatherApp.showCity = document.querySelector('#cityName') 
 
     //targeting the cityFlag div
     weatherApp.cityFlagDiv = document.querySelector(".cityFlag")

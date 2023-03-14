@@ -234,6 +234,11 @@ select {
   font-weight: 400;
 }
 
+option {
+  font-family: "Tilt Neon", cursive;
+  font-weight: 400;
+}
+
 h1 {
   font-family: "Tilt Neon", cursive;
   font-weight: 700;
