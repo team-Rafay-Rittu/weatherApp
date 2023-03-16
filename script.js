@@ -1,43 +1,12 @@
 /// create a weather app object
 const weatherApp = {};
 
-weatherApp.icons = {
-    cloudy: {
-        description: [`Cloudy`, `Partly cloudy`, `Mostly cloudy`, `Overcast`],
-        symbol:`./assets/icons8-cloud-30.png`,
-        altText: `cloud icon`
-    },
-    rain: {
-        description: [`Rain`, `Drizzle`, `Light rain`],
-        symbol:`./assets/icons8-rainy-weather-30.png`,
-        altText: `rain icon`
-    },
-    sun: {
-        description:`Sunny`,
-        symbol: `./assets/icons8-sun-star-48.png`,
-        altText: `sun icon`
-    },
-    partialSun: {
-        description: `Partly Sunny`,
-        symbol: `./assets/icons8-partly-cloudy-day-48.png`,
-        altText: `partly sunny and cloudy icon`
-    },
-    snow: {
-        description: `snow`,
-        symbol:`./assets/icons8-snow-40.png`,
-        altText: `snow icon`
-    }
-};
 
 //creating an api Url for weather data for top 50 cities
 
 // obtain the api url & api key save in the weather object
 weatherApp.apiUrl = "http://dataservice.accuweather.com/currentconditions/v1/topcities/50";
 weatherApp.apiKey = "DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy"
-
-
-
-
 
 // ** FUNCTION FOR INITIAL API CALL ** //
 
@@ -87,6 +56,7 @@ weatherApp.getCities = () => {
         });
 }
 // ** weatherApp.getCities FUNCTION ENDS ** //
+
 
 
 
@@ -151,8 +121,6 @@ weatherApp.submitButton.addEventListener('click', function(){
     weatherApp.displayWeatherStats(weatherApp.userCity, weatherApp.weatherData);
 });
 // ** SUBMIT BUTTON EVENT LISTENER ENDS** //
-
-
 
 
 // ** RANDOM BUTTON EVENT LISTENER ** //
@@ -338,6 +306,7 @@ weatherApp.getCityWeather = (cityData) => {
 //getCityWeather Function ends
 
 
+
 // ** FUNCTION FOR DISPLAYING WEATHER STATS ** //
 
 //this function will display the weather stats for the users selected city or random city
@@ -367,43 +336,7 @@ weatherApp.displayWeatherStats = (passedCity, weatherData) => {
 
             //get the city's weather Text and store in a variable to be used later
             weatherApp.currentWeatherText = city.WeatherText;
-            if (weatherApp.currentWeatherText === 'Cloudy' || weatherApp.currentWeatherText === 'Partly cloudy' || weatherApp.currentWeatherText === 'Mostly cloudy' || weatherApp.currentWeatherText === 'Overcast' || weatherApp.currentWeatherText === 'Some clouds') {
-                console.log("it's cloudy!");
-                weatherApp.displayIconSource = weatherApp.icons.cloudy.symbol;
-                weatherApp.displayIconAlt = weatherApp.icons.cloudy.altText;
 
-            } else if (weatherApp.currentWeatherText === 'Rain' || weatherApp.currentWeatherText === 'Drizzle' || weatherApp.currentWeatherText === 'Light rain' || weatherApp.currentWeatherText === 'Showers')
-            {
-                console.log("its raining");
-                weatherApp.displayIconSource = weatherApp.icons.rain.symbol;
-                weatherApp.displayIconAlt = weatherApp.icons.rain.altText;
-
-            } else if (weatherApp.currentWeatherText === 'Sunny' || weatherApp.currentWeatherText === 'Clear' || weatherApp.currentWeatherText === 'Mostly Sunny')
-            {
-                console.log("it's sunny");
-                weatherApp.displayIconSource = weatherApp.icons.sun.symbol;
-                weatherApp.displayIconAlt = weatherApp.icons.sun.altText;
-
-            } else if (weatherApp.currentWeatherText === 'Partly sunny' || weatherApp.currentWeatherText === 'Clouds and sun')
-             {
-                console.log("it's partly sunny");
-                weatherApp.displayIconSource = weatherApp.icons.partialSun.symbol;
-                weatherApp.displayIconAlt = weatherApp.icons.partialSun.altText;
-
-            } else if (weatherApp.currentWeatherText === 'Snowing' || weatherApp.currentWeatherText === 'Sleet' || weatherApp.currentWeatherText === 'Snow showers' || weatherApp.currentWeatherText === 'Snow')
-             {
-                console.log("it's snowing");
-                weatherApp.displayIconSource = weatherApp.icons.snow.symbol;
-                weatherApp.displayIconAlt = weatherApp.icons.snow.altText;
-            };
-
-
-            //get the city's precipitation type if it has precipitation
-            if (city.PrecipitationType !== null) {
-                weatherApp.currentPrecipitation = city.PrecipitationType;
-            } else {
-                weatherApp.currentPrecipitation = "";
-            }
             //get the city name
             weatherApp.cityName = city.EnglishName;
 
@@ -412,6 +345,10 @@ weatherApp.displayWeatherStats = (passedCity, weatherData) => {
 
             //get the city's country name
             weatherApp.countryName = city.Country.EnglishName;
+
+            // get the city's weatherIcon value 
+            weatherApp.weatherIcon = city.WeatherIcon;
+        
         }
     });
    
@@ -428,29 +365,26 @@ weatherApp.displayWeatherStats = (passedCity, weatherData) => {
     // create img element for weather icon
     weatherApp.displayIcon = document.createElement('img')
 
+
    
-    //add class attribute to each li element
-    weatherApp.tempLi.setAttribute('class', 'tempLi');
-    weatherApp.weatherTextLi.setAttribute('class', 'weatherTextLi');
-    weatherApp.precipitationLi.setAttribute('class', 'precipitationLi');
-    // create src and alt attribute to the li element for the weather icons
-    weatherApp.displayIcon.setAttribute('src', `${weatherApp.displayIconSource}`);
-    weatherApp.displayIcon.setAttribute('alt', `${weatherApp.displayIconAlt}`);
+    
    
-   
+
+    // create src and alt attribute to the li element for the weather icons 
+    weatherApp.displayIcon.setAttribute('src', `./assets/${weatherApp.weatherIcon}.png`);
+    weatherApp.displayIcon.setAttribute('alt', `Weather is ${weatherApp.currentWeatherText} icon`);
+    
+    
     //add the weather data to the list elements
     weatherApp.tempLi.innerText = weatherApp.currentTemp;
     weatherApp.weatherTextLi.innerText = weatherApp.currentWeatherText;
-    weatherApp.precipitationLi.innerText = weatherApp.currentPrecipitation;
-   
-   
+
     //append the li elements to the ul
     weatherApp.ul.appendChild(weatherApp.tempLi);
     weatherApp.ul.appendChild(weatherApp.weatherTextLi);
     weatherApp.ul.appendChild(weatherApp.precipitationLi);
     weatherApp.precipitationLi.appendChild(weatherApp.displayIcon);
    
-
     // create a button to convert celsius to fahrenheit
     weatherApp.convertButton = document.createElement('button');
 
