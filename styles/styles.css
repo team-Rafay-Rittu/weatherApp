@@ -313,7 +313,26 @@ h2 {
   display: flex;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
-  padding-bottom: 40px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.buttonContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 button {
@@ -324,15 +343,17 @@ button {
   -webkit-box-shadow: 14px 14px 10px -1px rgba(71, 74, 64, 0.7);
           box-shadow: 14px 14px 10px -1px rgba(71, 74, 64, 0.7);
   padding: 10px 10px;
+  max-width: 330px;
 }
 
 select {
-  width: 70%;
+  width: 80%;
   margin: 0 auto;
   margin-bottom: 20px;
   padding: 10px 10px;
   border-radius: 15px;
   border: none;
+  max-width: 550px;
 }
 
 ul {
@@ -346,6 +367,9 @@ ul {
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 li {
@@ -366,6 +390,52 @@ li {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  max-width: 200px;
+}
+
+.search {
+  padding-bottom: 50px;
+}
+
+.citySearch {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 30px;
+}
+
+#citySearchBar {
+  border-radius: 15px;
+  padding: 10px 10px;
+  width: 80%;
+  margin-top: 20px;
+  max-width: 377px;
+  font-family: "Tilt Neon", cursive;
+}
+
+.searchInstructions {
+  margin-bottom: 40px;
+}
+
+.moreOptions {
+  margin: 0 auto;
+  margin-top: 20px;
+  padding: 10 15px;
+}
+
+.radioDivContainer {
+  margin-top: 10px;
+  margin-bottom: 15px;
 }
 
 footer {
