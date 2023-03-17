@@ -108,7 +108,7 @@ weatherApp.submitButton.addEventListener('click', function(){
     // clear the cityFlag div when user selects new city
     weatherApp.cityFlagDiv.innerHTML = "";
 
-    weatherApp.moreOptions.style.visibility = "visible";
+    weatherApp.moreOptions.style.display = "block";
     if (weatherApp.citySearchDiv) {
         weatherApp.citySearchDiv.innerHTML = "";
     }
@@ -143,7 +143,7 @@ weatherApp.randomButton.addEventListener('click', function () {
     //clear conversion div when random button is clicked
     weatherApp.div.innerHTML = "";
 
-    weatherApp.moreOptions.style.visibility = "visible";
+    weatherApp.moreOptions.style.display = "block";
      if (weatherApp.citySearchDiv) {
         weatherApp.citySearchDiv.innerHTML = "";
     }
@@ -161,7 +161,7 @@ weatherApp.moreOptions.addEventListener('click', function () {
     weatherApp.countryNames.sort();
     
     //when More Options button is clicked, it will be hidden
-    weatherApp.moreOptions.style.visibility = "hidden";
+    weatherApp.moreOptions.style.display = "none";
 
    
     //create a paragraph with instructions, a dropdown menu with all the countries
@@ -171,8 +171,10 @@ weatherApp.moreOptions.addEventListener('click', function () {
     
     //paragraph element creation and appending
     weatherApp.citySearchP = document.createElement('p');
-    weatherApp.citySearchP.innerText = "Please select a country from the dropdown menu and type a name of a city in the search bar to get weather data for any city in the world";
+    weatherApp.citySearchP.innerText = "Please select a country from the dropdown menu and type a name of a city in the search bar to get weather data for any city in the world.";
+    weatherApp.citySearchP.setAttribute('class', 'searchInstructions');
     weatherApp.citySearchDiv.appendChild(weatherApp.citySearchP);
+
     
     //select element creation with a "Please choose country " option element appending
     weatherApp.countrySelect = document.createElement('select');
@@ -252,7 +254,9 @@ weatherApp.searchCity = (city, country) => {
                 } else if (result.length > 1) {
                     //loop through the result which contains location data for multiple cities
                     result.forEach(city => {
-                        //create a radio button and an associated label for each city
+                        //create a div that contains radio button and an associated label for each city
+                        const radioDiv = document.createElement('div')
+                        radioDiv.setAttribute('class', 'radioDivContainer')
                         const cityLabel = document.createElement('label')
                         cityLabel.setAttribute('for', `${city.Key}`)
                         cityLabel.innerText = `${city.EnglishName}, ${city.AdministrativeArea.EnglishName}, ${city.Country.EnglishName}`
@@ -262,9 +266,12 @@ weatherApp.searchCity = (city, country) => {
                         cityRadio.setAttribute('name', 'multipleCities');
                         cityRadio.setAttribute('value', `${city.Key}`);
                         cityRadio.setAttribute('id', `${city.Key}`);
+
+                        radioDiv.appendChild(cityRadio);
+                        radioDiv.appendChild(cityLabel);
                         
-                        weatherApp.citySearchDiv.appendChild(cityRadio)
-                        weatherApp.citySearchDiv.appendChild(cityLabel)
+                        weatherApp.citySearchDiv.appendChild(radioDiv);
+                        
                     })
 
                     //group all the radio buttons together in the variable radioGroup
