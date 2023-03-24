@@ -18,26 +18,29 @@ weatherApp.getCities = () => {
     });
 
     fetch(weatherApp.url)
+        console.log("test")
         .then((response) => {
-            return response.json()
+           console.log("testTwo")
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error(response.statusText);
+            }
         })
+
         .then((jsonResult) => {
             //store the jsonResult (which contains all the weather data for top 50 cities) in the weatherApp object
             weatherApp.weatherData = jsonResult;
             console.log(jsonResult);
 
-            // create an empty array for sorting city names by alphabet
-            weatherApp.cityNames = [];
-
-            // loop through the weatherData to store all city names
-            jsonResult.forEach(object => {
-                // then add each city name to the array
-                weatherApp.cityNames.push(object.EnglishName);
+            // creating new array filling it from json reault object of country names
+            weatherApp.cityNames = jsonResult.map(object => {
+                return object.EnglishName;
             });
-
+        
             //sort the city names by alphabet
             weatherApp.cityNames.sort();
-
+            
             //populate the select element with city names alphabetically using weatherApp.cityNames array
             weatherApp.cityNames.forEach(city => {
 
@@ -53,12 +56,16 @@ weatherApp.getCities = () => {
                 // append child option element to parent Select element
                 weatherApp.dropDown.appendChild(cityElement);
             });
+        })
+        .catch((error) => {
+            if (error.message === "Not Found") {
+                alert("");
+            } else {
+                alert("We apologize! WeatherApp is currently down. Please return after 24 hours!");
+            }
         });
 }
 // ** weatherApp.getCities FUNCTION ENDS ** //
-
-
-
 
 
 // ** FUNCTION FOR GETTING ALL COUNTRIES weahterApp.getCountries ** //
@@ -80,7 +87,7 @@ weatherApp.getCountries = () => {
                         return res.json()
                     })
                         .then((result) => {
-                                                       
+                                                   
                             //loop through the result to get all countries
                             result.forEach(country => {
                                 weatherApp.countryNames.push(country.EnglishName)
@@ -94,136 +101,136 @@ weatherApp.getCountries = () => {
 
 
 
-// ** SUBMIT BUTTON EVENT LISTENER ** //
+// // ** SUBMIT BUTTON EVENT LISTENER ** //
 
-//target the "Submit" button
-weatherApp.submitButton = document.querySelector('#submit');
+// //target the "Submit" button
+// weatherApp.submitButton = document.querySelector('#submit');
 
-//add event listener to the "Submit" button
-weatherApp.submitButton.addEventListener('click', function(){
+// //add event listener to the "Submit" button
+// weatherApp.submitButton.addEventListener('click', function(){
 
-    //find out which city user has selected
-    weatherApp.userCity = weatherApp.dropDown.value;
+//     //find out which city user has selected
+//     weatherApp.userCity = weatherApp.dropDown.value;
 
-    // clear the cityFlag div when user selects new city
-    weatherApp.cityFlagDiv.innerHTML = "";
+//     // clear the cityFlag div when user selects new city
+//     weatherApp.cityFlagDiv.innerHTML = "";
 
-    weatherApp.moreOptions.style.display = "block";
-    if (weatherApp.citySearchDiv) {
-        weatherApp.citySearchDiv.innerHTML = "";
-    }
+//     weatherApp.moreOptions.style.display = "block";
+//     if (weatherApp.citySearchDiv) {
+//         weatherApp.citySearchDiv.innerHTML = "";
+//     }
    
    
-    //clear the conversion div when user selects new city
-    weatherApp.div.innerHTML = "";
+//     //clear the conversion div when user selects new city
+//     weatherApp.div.innerHTML = "";
 
-    //call the display weather stats function with the users selected city
-    weatherApp.displayWeatherStats(weatherApp.userCity, weatherApp.weatherData);
-});
+//     //call the display weather stats function with the users selected city
+//     weatherApp.displayWeatherStats(weatherApp.userCity, weatherApp.weatherData);
+// });
 // ** SUBMIT BUTTON EVENT LISTENER ENDS** //
 
 
 // ** RANDOM BUTTON EVENT LISTENER ** //
 
 // target the 'random' button
-weatherApp.randomButton = document.querySelector('#random');
+// weatherApp.randomButton = document.querySelector('#random');
 
-// create an event listener
-weatherApp.randomButton.addEventListener('click', function () {
+// // create an event listener
+// weatherApp.randomButton.addEventListener('click', function () {
 
-    //generate a random number to select a random city
-    weatherApp.randomNum = Math.floor(Math.random() * 50);
+//     //generate a random number to select a random city
+//     weatherApp.randomNum = Math.floor(Math.random() * 50);
 
-    //select a random city based on the random number
-    weatherApp.randomCity = weatherApp.weatherData[weatherApp.randomNum].EnglishName;
+//     //select a random city based on the random number
+//     weatherApp.randomCity = weatherApp.weatherData[weatherApp.randomNum].EnglishName;
 
-    //clear the cityFlag div when random button is clicked
-    weatherApp.cityFlagDiv.innerHTML = "";
+//     //clear the cityFlag div when random button is clicked
+//     weatherApp.cityFlagDiv.innerHTML = "";
 
-    //clear conversion div when random button is clicked
-    weatherApp.div.innerHTML = "";
+//     //clear conversion div when random button is clicked
+//     weatherApp.div.innerHTML = "";
 
-    weatherApp.moreOptions.style.display = "block";
-     if (weatherApp.citySearchDiv) {
-        weatherApp.citySearchDiv.innerHTML = "";
-    }
-    //call the display weather stats function with random city
-    weatherApp.displayWeatherStats(weatherApp.randomCity, weatherApp.weatherData);
-});
+//     weatherApp.moreOptions.style.display = "block";
+//      if (weatherApp.citySearchDiv) {
+//         weatherApp.citySearchDiv.innerHTML = "";
+//     }
+//     //call the display weather stats function with random city
+//     weatherApp.displayWeatherStats(weatherApp.randomCity, weatherApp.weatherData);
+// });
 // ** RANDOM BUTTON EVENT LISTENER ENDS ** //
 
 
 
-// ** MORE OPTIONS BUTTON EVENT LISTENER ** //
-weatherApp.moreOptions = document.querySelector('.moreOptions')
-weatherApp.moreOptions.addEventListener('click', function () {
-    //sort countryNames which we got using getCountries function
-    weatherApp.countryNames.sort();
+// // ** MORE OPTIONS BUTTON EVENT LISTENER ** //
+// weatherApp.moreOptions = document.querySelector('.moreOptions')
+// weatherApp.moreOptions.addEventListener('click', function () {
+//     //sort countryNames which we got using getCountries function
+//     weatherApp.countryNames.sort();
     
-    //when More Options button is clicked, it will be hidden
-    weatherApp.moreOptions.style.display = "none";
+//     //when More Options button is clicked, it will be hidden
+//     weatherApp.moreOptions.style.display = "none";
 
    
-    //create a paragraph with instructions, a dropdown menu with all the countries
-    //and an input with type text for user to enter a city name and click the City Search button
-    //target the citySearch div element to contain the above elements
-    weatherApp.citySearchDiv = document.querySelector('.citySearch');
+//     //create a paragraph with instructions, a dropdown menu with all the countries
+//     //and an input with type text for user to enter a city name and click the City Search button
+//     //target the citySearch div element to contain the above elements
+//     weatherApp.citySearchDiv = document.querySelector('.citySearch');
     
-    //paragraph element creation and appending
-    weatherApp.citySearchP = document.createElement('p');
-    weatherApp.citySearchP.innerText = "Please select a country from the dropdown menu and type a name of a city in the search bar to get weather data for any city in the world.";
-    weatherApp.citySearchP.setAttribute('class', 'searchInstructions');
-    weatherApp.citySearchDiv.appendChild(weatherApp.citySearchP);
+//     //paragraph element creation and appending
+//     weatherApp.citySearchP = document.createElement('p');
+//     weatherApp.citySearchP.innerText = "Please select a country from the dropdown menu and type a name of a city in the search bar to get weather data for any city in the world.";
+//     weatherApp.citySearchP.setAttribute('class', 'searchInstructions');
+//     weatherApp.citySearchDiv.appendChild(weatherApp.citySearchP);
 
     
-    //select element creation with a "Please choose country " option element appending
-    weatherApp.countrySelect = document.createElement('select');
-    const cityOptionDefault = document.createElement('option');
-    cityOptionDefault.innerText = "Please choose a country";
-    cityOptionDefault.setAttribute("value", "choose");
-    weatherApp.countrySelect.appendChild(cityOptionDefault);
+//     //select element creation with a "Please choose country " option element appending
+//     weatherApp.countrySelect = document.createElement('select');
+//     const cityOptionDefault = document.createElement('option');
+//     cityOptionDefault.innerText = "Please choose a country";
+//     cityOptionDefault.setAttribute("value", "choose");
+//     weatherApp.countrySelect.appendChild(cityOptionDefault);
     
-    //looping through the country names and creating an option element for each country and appending it to the select element
-    weatherApp.countryNames.forEach(country => {
-        const countryOption = document.createElement('option');
-        countryOption.innerText = country;
-        countryOption.setAttribute("value", country);
-        weatherApp.countrySelect.appendChild(countryOption);
-    })
+//     //looping through the country names and creating an option element for each country and appending it to the select element
+//     weatherApp.countryNames.forEach(country => {
+//         const countryOption = document.createElement('option');
+//         countryOption.innerText = country;
+//         countryOption.setAttribute("value", country);
+//         weatherApp.countrySelect.appendChild(countryOption);
+//     })
 
-    //append the select element to the parent div
-    weatherApp.citySearchDiv.appendChild(weatherApp.countrySelect)
+//     //append the select element to the parent div
+//     weatherApp.citySearchDiv.appendChild(weatherApp.countrySelect)
 
-    //create and append a label for the input search bar
-    weatherApp.citySearchLabel = document.createElement('label')
-    weatherApp.citySearchLabel.innerText = "Please enter a city name in the search bar:";
-    weatherApp.citySearchLabel.setAttribute('for', 'citySearchBar');
-    weatherApp.citySearchDiv.appendChild(weatherApp.citySearchLabel);
+//     //create and append a label for the input search bar
+//     weatherApp.citySearchLabel = document.createElement('label')
+//     weatherApp.citySearchLabel.innerText = "Please enter a city name in the search bar:";
+//     weatherApp.citySearchLabel.setAttribute('for', 'citySearchBar');
+//     weatherApp.citySearchDiv.appendChild(weatherApp.citySearchLabel);
 
-    //create and apppend the input search bar
-    weatherApp.citySearchBar = document.createElement('input');
-    weatherApp.citySearchBar.setAttribute('id', "citySearchBar");
-    weatherApp.citySearchBar.setAttribute('type', "text");
-    weatherApp.citySearchBar.setAttribute('placeholder', "City Name");
-    weatherApp.citySearchDiv.appendChild(weatherApp.citySearchBar);
+//     //create and apppend the input search bar
+//     weatherApp.citySearchBar = document.createElement('input');
+//     weatherApp.citySearchBar.setAttribute('id', "citySearchBar");
+//     weatherApp.citySearchBar.setAttribute('type', "text");
+//     weatherApp.citySearchBar.setAttribute('placeholder', "City Name");
+//     weatherApp.citySearchDiv.appendChild(weatherApp.citySearchBar);
 
-    //create a search button and append it to the div
-    weatherApp.citySearchButton = document.createElement('button');
-    weatherApp.citySearchButton.setAttribute('id', 'citySearchButton');
-    weatherApp.citySearchButton.innerText = "City Search"
-    weatherApp.citySearchDiv.appendChild(weatherApp.citySearchButton);
-
-
+//     //create a search button and append it to the div
+//     weatherApp.citySearchButton = document.createElement('button');
+//     weatherApp.citySearchButton.setAttribute('id', 'citySearchButton');
+//     weatherApp.citySearchButton.innerText = "City Search"
+//     weatherApp.citySearchDiv.appendChild(weatherApp.citySearchButton);
 
 
-    // ** CITY SEARCH BUTTON EVENT LISTENER ** //
-    weatherApp.citySearchButton.addEventListener('click', function () {
-        //get the city name from the input and the country name from the dropdown menu and call the searchCity function
-        weatherApp.searchCity(weatherApp.citySearchBar.value, weatherApp.countrySelect.value)
-    })
-    // ** CITY SEARCH BUTTON EVENT LISTENER ENDS ** //
-})
-// ** MORE OPTIONS BUTTON EVENT LISTENER ENDS** //
+
+
+//     // ** CITY SEARCH BUTTON EVENT LISTENER ** //
+//     weatherApp.citySearchButton.addEventListener('click', function () {
+//         //get the city name from the input and the country name from the dropdown menu and call the searchCity function
+//         weatherApp.searchCity(weatherApp.citySearchBar.value, weatherApp.countrySelect.value)
+//     })
+//     // ** CITY SEARCH BUTTON EVENT LISTENER ENDS ** //
+// })
+// // ** MORE OPTIONS BUTTON EVENT LISTENER ENDS** //
 
 
 
@@ -243,17 +250,19 @@ weatherApp.searchCity = (city, country) => {
             //response is location data 
             return response.json()
         })
-            .then((result) => {
+
+            .then((citySearchResult) => {
+               
                 //3 possibilits exist when searching for a city.  The city doesn't exist so the result will have a lenght of 0
-                if (result.length === 0) {
+                if (citySearchResult.length === 0) {
                     alert("No results found.  Please try again")
                 //if there is only 1 city that matches the search, call the getCityWeatherfunction and pass in the location data
-                } else if (result.length === 1) {
-                    weatherApp.getCityWeather(result[0]);
+                } else if (citySearchResult.length === 1) {
+                    weatherApp.getCityWeather(citySearchResult[0]);
                 //if there are multiple cities that match the search
-                } else if (result.length > 1) {
+                } else if (citySearchResult.length > 1) {
                     //loop through the result which contains location data for multiple cities
-                    result.forEach(city => {
+                    citySearchResult.forEach(city => {
                         //create a div that contains radio button and an associated label for each city
                         const radioDiv = document.createElement('div')
                         radioDiv.setAttribute('class', 'radioDivContainer')
@@ -281,7 +290,7 @@ weatherApp.searchCity = (city, country) => {
                     //when a change is detected, call getCityWeather function and pass in the location data for the city which the user selected with a radio button
                     for (let i = 0; i < radioGroup.length; i++) {
                         radioGroup[i].addEventListener('change', function () {
-                            weatherApp.getCityWeather(result[i]);
+                            weatherApp.getCityWeather(citySearchResult[i]);
                         })
                     }
 
@@ -325,7 +334,7 @@ weatherApp.displayWeatherStats = (passedCity, weatherData) => {
     //clear conversion div when random button is clicked
     weatherApp.div.innerHTML = "";
 
-    weatherApp.moreOptions.style.visibility = "visible";
+    weatherApp.moreOptions.style.display = "block";
     if (weatherApp.citySearchDiv) {
         weatherApp.citySearchDiv.innerHTML = "";
     }
@@ -452,7 +461,139 @@ weatherApp.displayWeatherStats = (passedCity, weatherData) => {
     weatherApp.cityFlagDiv.appendChild(weatherApp.nameOfCity);
 
 }
-           
+
+// ATTACHED ALL THE EVENT LISTENERS TO THIS FUNCTION BELOW
+
+weatherApp.allEventListeners = () => {
+    // ** SUBMIT BUTTON EVENT LISTENER ** //
+
+    //target the "Submit" button
+    weatherApp.submitButton = document.querySelector('#submit');
+
+    //add event listener to the "Submit" button
+    weatherApp.submitButton.addEventListener('click', function () {
+
+        //find out which city user has selected
+        weatherApp.userCity = weatherApp.dropDown.value;
+
+        // clear the cityFlag div when user selects new city
+        weatherApp.cityFlagDiv.innerHTML = "";
+
+        weatherApp.moreOptions.style.display = "block";
+        if (weatherApp.citySearchDiv) {
+            weatherApp.citySearchDiv.innerHTML = "";
+        }
+
+        //clear the conversion div when user selects new city
+        weatherApp.div.innerHTML = "";
+
+        //call the display weather stats function with the users selected city
+        weatherApp.displayWeatherStats(weatherApp.userCity, weatherApp.weatherData);
+    });
+// ** SUBMIT BUTTON EVENT LISTENER ENDS** //
+
+    // ** RANDOM BUTTON EVENT LISTENER ** //
+
+    // target the 'random' button
+    weatherApp.randomButton = document.querySelector('#random');
+
+    // create an event listener
+    weatherApp.randomButton.addEventListener('click', function () {
+
+        //generate a random number to select a random city
+        weatherApp.randomNum = Math.floor(Math.random() * 50);
+
+        //select a random city based on the random number
+        weatherApp.randomCity = weatherApp.weatherData[weatherApp.randomNum].EnglishName;
+
+        //clear the cityFlag div when random button is clicked
+        weatherApp.cityFlagDiv.innerHTML = "";
+
+        //clear conversion div when random button is clicked
+        weatherApp.div.innerHTML = "";
+
+        weatherApp.moreOptions.style.display = "block";
+        if (weatherApp.citySearchDiv) {
+            weatherApp.citySearchDiv.innerHTML = "";
+        }
+        //call the display weather stats function with random city
+        weatherApp.displayWeatherStats(weatherApp.randomCity, weatherApp.weatherData);
+    });
+// ** RANDOM BUTTON EVENT LISTENER ENDS ** //
+
+    // ** MORE OPTIONS BUTTON EVENT LISTENER ** //
+    weatherApp.moreOptions = document.querySelector('.moreOptions')
+    weatherApp.moreOptions.addEventListener('click', function () {
+        //sort countryNames which we got using getCountries function
+        weatherApp.countryNames.sort();
+
+        //when More Options button is clicked, it will be hidden
+        weatherApp.moreOptions.style.display = "none";
+
+
+        //create a paragraph with instructions, a dropdown menu with all the countries
+        //and an input with type text for user to enter a city name and click the City Search button
+        //target the citySearch div element to contain the above elements
+        weatherApp.citySearchDiv = document.querySelector('.citySearch');
+
+        //paragraph element creation and appending
+        weatherApp.citySearchP = document.createElement('p');
+        weatherApp.citySearchP.innerText = "Please select a country from the dropdown menu and type a name of a city in the search bar to get weather data for any city in the world.";
+        weatherApp.citySearchP.setAttribute('class', 'searchInstructions');
+        weatherApp.citySearchDiv.appendChild(weatherApp.citySearchP);
+
+
+        //select element creation with a "Please choose country " option element appending
+        weatherApp.countrySelect = document.createElement('select');
+        const cityOptionDefault = document.createElement('option');
+        cityOptionDefault.innerText = "Please choose a country";
+        cityOptionDefault.setAttribute("value", "choose");
+        weatherApp.countrySelect.appendChild(cityOptionDefault);
+
+        //looping through the country names and creating an option element for each country and appending it to the select element
+        weatherApp.countryNames.forEach(country => {
+            const countryOption = document.createElement('option');
+            countryOption.innerText = country;
+            countryOption.setAttribute("value", country);
+            weatherApp.countrySelect.appendChild(countryOption);
+        })
+
+        //append the select element to the parent div
+        weatherApp.citySearchDiv.appendChild(weatherApp.countrySelect)
+
+        //create and append a label for the input search bar
+        weatherApp.citySearchLabel = document.createElement('label')
+        weatherApp.citySearchLabel.innerText = "Please enter a city name in the search bar:";
+        weatherApp.citySearchLabel.setAttribute('for', 'citySearchBar');
+        weatherApp.citySearchDiv.appendChild(weatherApp.citySearchLabel);
+
+        //create and apppend the input search bar
+        weatherApp.citySearchBar = document.createElement('input');
+        weatherApp.citySearchBar.setAttribute('id', "citySearchBar");
+        weatherApp.citySearchBar.setAttribute('type', "text");
+        weatherApp.citySearchBar.setAttribute('placeholder', "City Name");
+        weatherApp.citySearchDiv.appendChild(weatherApp.citySearchBar);
+
+        //create a search button and append it to the div
+        weatherApp.citySearchButton = document.createElement('button');
+        weatherApp.citySearchButton.setAttribute('id', 'citySearchButton');
+        weatherApp.citySearchButton.innerText = "City Search"
+        weatherApp.citySearchDiv.appendChild(weatherApp.citySearchButton);
+
+// ** MORE OPTIONS BUTTON EVENT LISTENER ENDS** //
+
+
+        // ** CITY SEARCH BUTTON EVENT LISTENER ** //
+        weatherApp.citySearchButton.addEventListener('click', function () {
+            //get the city name from the input and the country name from the dropdown menu and call the searchCity function
+            weatherApp.searchCity(weatherApp.citySearchBar.value, weatherApp.countrySelect.value)
+        })
+        // ** CITY SEARCH BUTTON EVENT LISTENER ENDS ** //
+    })
+
+}
+
+// END OF ALL THE EVENT LISTENERS FUNCTION //
 // create an init method
 weatherApp.init = () => {
 
@@ -471,7 +612,11 @@ weatherApp.init = () => {
     // Target the div
     weatherApp.div = document.querySelector('#conversion');
 
+    weatherApp.allEventListeners();
+
 };
 
 // call the init method
 weatherApp.init();
+
+
