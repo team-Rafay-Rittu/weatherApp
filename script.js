@@ -18,9 +18,9 @@ weatherApp.getCities = () => {
     });
 
     fetch(weatherApp.url)
-        console.log("test")
+        // console.log("test")
         .then((response) => {
-           console.log("testTwo")
+        //    console.log("testTwo")
             if (response.ok) {
                 return response.json();
             } else {
@@ -29,7 +29,7 @@ weatherApp.getCities = () => {
         })
 
         .then((jsonResult) => {
-            //store the jsonResult (which contains all the weather data for top 50 cities) in the weatherApp object
+            //store the jsonResult data (which contains all the weather data for top 50 cities) in the weatherApp object
             weatherApp.weatherData = jsonResult;
             console.log(jsonResult);
 
@@ -57,14 +57,14 @@ weatherApp.getCities = () => {
                 weatherApp.dropDown.appendChild(cityElement);
             });
         })
-        .catch((error) => {
-            if (error.message === "Not Found") {
-                alert("");
-            } else {
-                alert("We apologize! WeatherApp is currently down. Please return after 24 hours!");
-            }
-        });
-}
+        // .catch((error) => {
+        //     if (error.message === "Not Found") {
+        //         alert("");
+        //     } else {
+        //         alert("We apologize! WeatherApp is currently down. Please return after 24 hours!");
+        //     }
+        // });
+    }
 // ** weatherApp.getCities FUNCTION ENDS ** //
 
 
@@ -382,10 +382,6 @@ weatherApp.displayWeatherStats = (passedCity, weatherData) => {
     weatherApp.displayIcon = document.createElement('img')
 
 
-   
-    
-   
-
     // create src and alt attribute to the li element for the weather icons 
     weatherApp.displayIcon.setAttribute('src', `./assets/${weatherApp.weatherIcon}.png`);
     weatherApp.displayIcon.setAttribute('alt', `Weather is ${weatherApp.currentWeatherText} icon`);
@@ -400,6 +396,9 @@ weatherApp.displayWeatherStats = (passedCity, weatherData) => {
     weatherApp.ul.appendChild(weatherApp.weatherTextLi);
     weatherApp.ul.appendChild(weatherApp.precipitationLi);
     weatherApp.precipitationLi.appendChild(weatherApp.displayIcon);
+
+    // RITTU: set a class element to target the first li element
+    weatherApp.tempLi.setAttribute('class', 'tempDisplay');
    
     // create a button to convert celsius to fahrenheit
     weatherApp.convertButton = document.createElement('button');
@@ -416,28 +415,32 @@ weatherApp.displayWeatherStats = (passedCity, weatherData) => {
     // run a function that converts the temp to fahrenheit
     weatherApp.convertButton.addEventListener('click', function (convert) {
 
-        // new line added by Rittu. Target the ul #weatherStats as we now want to display F temp in that ul.
-        weatherApp.ul = document.querySelector('#weatherStats');
-   
-        //  create paragraph element to display to the temp in F
-        // weatherApp.paraFahrenheit = document.createElement('p');
+        //  Target the ul #weatherStats as we now want to display F temp in that ul.
+        // weatherApp.ul = document.querySelector('#weatherStats');
 
-        // new line added by Rittu. Create li elment to display F temp
+        // Create li elment to display F temp
         weatherApp.displayFahrenheit = document.createElement('li');
 
-        //  add fahrenheit value and unit to the p element
-        // weatherApp.paraFahrenheit.innerText = weatherApp.fahrenheit;
-        // new line added by Rittu. Add the F value to the li element
-        weatherApp.displayFahrenheit.innerText = weatherApp.fahrenheit;
+        // RITTU: targeted new class created on list item
+        weatherApp.displayFahrenheit = document.querySelector('.tempDisplay');
 
-        // display the fahrenheit temp on the DOM
-        // weatherApp.div.appendChild(weatherApp.paraFahrenheit);
-        // new line added by Rittu. Display the F temp on the ul parent
+        //  Add the F value to the li element
+        weatherApp.displayFahrenheit.innerText = weatherApp.fahrenheit;
+        
+        //  Display the F temp on the ul parent
         weatherApp.ul.appendChild(weatherApp.displayFahrenheit);
 
         // remove the convertButton from the parent node (body)
-        weatherApp.div.removeChild(weatherApp.convertButton);
-       
+        // weatherApp.div.removeChild(weatherApp.convertButton);
+
+        // RITTU NEW LINE 
+            weatherApp.convertButton = document.querySelector('#convert');
+            if (weatherApp.convertButton.innerText === "Convert to F") {
+            weatherApp.convertButton.innerText = "Convert to C";
+            } else {
+            weatherApp.convertButton.innerText = "Convert to F";
+            weatherApp.tempLi.innerText = weatherApp.currentTemp;
+            };
     });
 
 
