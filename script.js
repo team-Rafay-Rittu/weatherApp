@@ -26,7 +26,7 @@ weatherApp.getCities = () => {
         })
 
         .then((jsonResult) => {
-            //store the jsonResult (which contains all the weather data for top 50 cities) in the weatherApp object
+            //store the jsonResult data (which contains all the weather data for top 50 cities) in the weatherApp object
             weatherApp.weatherData = jsonResult;
 
             // creating new array filling it from json reault object of country names
@@ -166,8 +166,6 @@ weatherApp.searchCity = (city, country) => {
 // ** ---------FUNCTION FOR SEARCHING FOR A CITY ENDS ---------** //
 
 
-
-
 // **---------FUNCTION TO GET THE WEATHER DATA OF A SEARCHED CITY--------- ** //
 weatherApp.getCityWeather = (cityData) => {
     console.log(cityData);
@@ -243,6 +241,9 @@ weatherApp.displayWeatherStats = (passedCity, weatherData) => {
     weatherApp.ul.appendChild(weatherApp.weatherTextLi);
     weatherApp.ul.appendChild(weatherApp.precipitationLi);
     weatherApp.precipitationLi.appendChild(weatherApp.displayIcon);
+
+    // RITTU: set a class element to target the first li element
+    weatherApp.tempLi.setAttribute('class', 'tempDisplay');
    
     // create a button to convert celsius to fahrenheit
     weatherApp.convertButton = document.createElement('button');
@@ -263,22 +264,29 @@ weatherApp.displayWeatherStats = (passedCity, weatherData) => {
         // new line added by Rittu. Target the ul #weatherStats as we now want to display F temp in that ul.
         // weatherApp.ul = document.querySelector('#weatherStats');
 
-        // new line added by Rittu. Create li elment to display F temp
+        // Create li elment to display F temp
         weatherApp.displayFahrenheit = document.createElement('li');
 
-        //  add fahrenheit value and unit to the p element
-        // weatherApp.paraFahrenheit.innerText = weatherApp.fahrenheit;
-        // new line added by Rittu. Add the F value to the li element
-        weatherApp.displayFahrenheit.innerText = weatherApp.fahrenheit;
+        // RITTU: targeted new class created on list item
+        weatherApp.displayFahrenheit = document.querySelector('.tempDisplay');
 
-        // display the fahrenheit temp on the DOM
-        // weatherApp.div.appendChild(weatherApp.paraFahrenheit);
-        // new line added by Rittu. Display the F temp on the ul parent
+        //  Add the F value to the li element
+        weatherApp.displayFahrenheit.innerText = weatherApp.fahrenheit;
+        
+        //  Display the F temp on the ul parent
         weatherApp.ul.appendChild(weatherApp.displayFahrenheit);
 
         // remove the convertButton from the parent node (body)
-        weatherApp.div.removeChild(weatherApp.convertButton);
-       
+        // weatherApp.div.removeChild(weatherApp.convertButton);
+
+        // RITTU NEW LINE 
+            weatherApp.convertButton = document.querySelector('#convert');
+            if (weatherApp.convertButton.innerText === "Convert to F") {
+            weatherApp.convertButton.innerText = "Convert to C";
+            } else {
+            weatherApp.convertButton.innerText = "Convert to F";
+            weatherApp.tempLi.innerText = weatherApp.currentTemp;
+            };
     });
 
 
@@ -296,9 +304,6 @@ weatherApp.displayWeatherStats = (passedCity, weatherData) => {
     weatherApp.cityFlagDiv.appendChild(weatherApp.nameOfCity);
 
 }
-
-
-
 
 
 //** --------- ATTACHED ALL THE EVENT LISTENERS TO THIS FUNCTION BELOW ---------**//
@@ -368,7 +373,6 @@ weatherApp.allEventListeners = () => {
 // **--------- RANDOM BUTTON EVENT LISTENER ENDS--------- ** //
 
 
-
 // **--------- MORE OPTIONS BUTTON EVENT LISTENER--------- ** //
     
     // target the 'More Options' button
@@ -390,7 +394,7 @@ weatherApp.allEventListeners = () => {
 
         //paragraph element creation and appending
         weatherApp.citySearchP = document.createElement('p');
-        weatherApp.citySearchP.innerText = "Please select a country from the dropdown menu and type a name of a city in the search bar to get weather data for any city in the world.";
+        weatherApp.citySearchP.innerText = "Please select a country from the dropdown menu and type the name of a city in the search bar below to get the weather forecast for any city in the world.";
         weatherApp.citySearchP.setAttribute('class', 'searchInstructions');
         weatherApp.citySearchDiv.appendChild(weatherApp.citySearchP);
 
