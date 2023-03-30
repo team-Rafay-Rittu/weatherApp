@@ -394,7 +394,7 @@ weatherApp.allEventListeners = () => {
 
         //paragraph element creation and appending
         weatherApp.citySearchP = document.createElement('p');
-        weatherApp.citySearchP.innerText = "Please select a country from the dropdown menu and type a name of a city in the search bar to get weather data for any city in the world.";
+        weatherApp.citySearchP.innerText = "Please select a country from the dropdown menu and type the name of a city in the search bar below to get the weather forecast for any city in the world.";
         weatherApp.citySearchP.setAttribute('class', 'searchInstructions');
         weatherApp.citySearchDiv.appendChild(weatherApp.citySearchP);
 
