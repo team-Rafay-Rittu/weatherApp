@@ -166,8 +166,6 @@ weatherApp.searchCity = (city, country) => {
 // ** ---------FUNCTION FOR SEARCHING FOR A CITY ENDS ---------** //
 
 
-
-
 // **---------FUNCTION TO GET THE WEATHER DATA OF A SEARCHED CITY--------- ** //
 weatherApp.getCityWeather = (cityData) => {
     console.log(cityData);
@@ -308,9 +306,6 @@ weatherApp.displayWeatherStats = (passedCity, weatherData) => {
 }
 
 
-
-
-
 //** --------- ATTACHED ALL THE EVENT LISTENERS TO THIS FUNCTION BELOW ---------**//
 
 weatherApp.allEventListeners = () => {
@@ -376,7 +371,6 @@ weatherApp.allEventListeners = () => {
 
 
 // **--------- RANDOM BUTTON EVENT LISTENER ENDS--------- ** //
-
 
 
 // **--------- MORE OPTIONS BUTTON EVENT LISTENER--------- ** //

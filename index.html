@@ -23,23 +23,24 @@
   <main>
     <div class="wrapper">
       <div class="fadeIn">
-      <h2>Stay one step ahead of Mother Nature with our weather app 
-      </h2>
-        <h3>Get real-time weather statistics & forecasts at your
-        fingertips!</h3>
+        <h2>Stay one step ahead of Mother Nature with our weather app</h2>
+        <h3>Get real-time weather statistics & forecasts at your fingertips!</h3>
       </div>
-    </div>
+    </div> <!-- wrapper END. -->
+
     <div class="gradient">
       <div class="wrapper">
         <p class="instructions"> 
-          Select a choice of 50 unique cities from the dropdown menu below and click "Submit" to see the weather results or click on
-          "I'm feeling sunny" to get weather results for a random city.
+          Select a choice of 50 unique cities worldwide from the dropdown menu below and click "submit" to see the weather results,or click on
+          "I'm feeling sunny" to get weather results for a random city destination.
         </p>
 
         <section class="citySelectFlex">
-          <select name="citySelect" id="citySelect">
-            <option value="choose">Please choose a city</option>
-          </select>
+          <form action="">
+            <select name="citySelect" id="citySelect">
+              <option value="choose">Please choose a city</option>
+            </select>
+          </form>
             <div class="buttonContainer">
               <button type="submit" id="submit">Submit</button>
               <button type="submit" id="random" class="random">I'm feeling sunny</button>
@@ -47,19 +48,17 @@
         </section>
 
         <section class="weatherInfo">
-            <div class="cityFlag">
-            </div>
+            <div class="cityFlag"></div>
             <ul id="weatherStats" class="weatherStats"></ul>
             <div id="conversion" class="conversion"></div>
         </section>
 
         <section class="search">
           <button class="moreOptions">Click for more options</button>
-          <div class="citySearch">
-          </div>
+          <div class="citySearch"></div>
         </section>
-        </div>    
-    </div>
+      </div> <!-- wrapper END. -->
+    </div> <!-- gradient END. -->
   </main>
 
   <footer>
