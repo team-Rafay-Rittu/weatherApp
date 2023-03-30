@@ -76,13 +76,20 @@ button {
   padding: 10px 10px;
   max-width: 330px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all;
+  position: relative;
+  top: 0px;
   &:hover {
       background-color: rgb(242, 242, 157);
     }
-    &:focus {
+  &:focus {
       background-color: rgb(242, 242, 157);
     }
+}
+
+button:active {
+  position: relative;
+  top: 5px;
 }
 
 select {
