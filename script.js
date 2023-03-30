@@ -5,7 +5,8 @@ const weatherApp = {};
 //creating an api Url for weather data for top 50 cities
 // obtain the api url & api key save in the weather object
 weatherApp.apiUrl = "http://dataservice.accuweather.com/currentconditions/v1/topcities/50";
-weatherApp.apiKey = "DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy"
+// weatherApp.apiKey = "DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy"
+weatherApp.apiKey = "iKLTvoFgSq9sc5BKM37ihFtikGNp351H"
 
 
 
@@ -63,7 +64,8 @@ weatherApp.getCities = () => {
 // ** ---------FUNCTION FOR GETTING ALL COUNTRIES weahterApp.getCountries ---------** //
 weatherApp.getCountries = () => {
     //get all regions of the world first with this api call
-    fetch("http://dataservice.accuweather.com/locations/v1/regions?apikey=DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy")
+    // fetch("http://dataservice.accuweather.com/locations/v1/regions?apikey=DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy")
+    fetch("http://dataservice.accuweather.com/locations/v1/regions?apikey=iKLTvoFgSq9sc5BKM37ihFtikGNp351H")
         .then((response) => {
             return response.json();
         })
@@ -74,7 +76,8 @@ weatherApp.getCountries = () => {
             //loop through the regions to get all countries within that region
             jsonResult.forEach(region => {
                 //get all countries in a region with this api call
-                fetch(`http://dataservice.accuweather.com/locations/v1/countries/${region.ID}?apikey=DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy`)
+                // fetch(`http://dataservice.accuweather.com/locations/v1/countries/${region.ID}?apikey=DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy`)
+                fetch(`http://dataservice.accuweather.com/locations/v1/countries/${region.ID}?apikey=iKLTvoFgSq9sc5BKM37ihFtikGNp351H`)
                     .then((res) => {
                         return res.json()
                     })
@@ -171,7 +174,7 @@ weatherApp.getCityWeather = (cityData) => {
     console.log(cityData);
     //get the location data which was passed into this function when called and get the location Key
     //make the API call for weather data for a particular city with the location Key
-    fetch(`http://dataservice.accuweather.com/currentconditions/v1/${cityData.Key}?apikey=DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy`)
+    fetch(`http://dataservice.accuweather.com/currentconditions/v1/${cityData.Key}?apikey=iKLTvoFgSq9sc5BKM37ihFtikGNp351H`)
         .then((response) => {
             return response.json();
         })
@@ -264,17 +267,20 @@ weatherApp.displayWeatherStats = (passedCity, weatherData) => {
         // new line added by Rittu. Target the ul #weatherStats as we now want to display F temp in that ul.
         // weatherApp.ul = document.querySelector('#weatherStats');
 
+        //*** NEW */
+        weatherApp.tempLi.innerText = weatherApp.fahrenheit;
+
         // Create li elment to display F temp
-        weatherApp.displayFahrenheit = document.createElement('li');
+        // weatherApp.displayFahrenheit = document.createElement('li');
 
         // RITTU: targeted new class created on list item
-        weatherApp.displayFahrenheit = document.querySelector('.tempDisplay');
+        // weatherApp.displayFahrenheit = document.querySelector('.tempDisplay');
 
         //  Add the F value to the li element
-        weatherApp.displayFahrenheit.innerText = weatherApp.fahrenheit;
+        // weatherApp.displayFahrenheit.innerText = weatherApp.fahrenheit;
         
         //  Display the F temp on the ul parent
-        weatherApp.ul.appendChild(weatherApp.displayFahrenheit);
+        // weatherApp.ul.appendChild(weatherApp.displayFahrenheit);
 
         // remove the convertButton from the parent node (body)
         // weatherApp.div.removeChild(weatherApp.convertButton);
@@ -400,7 +406,9 @@ weatherApp.allEventListeners = () => {
 
 
         //select element creation with a "Please choose country " option element appending
+        // weatherApp.formEl = document.createElement('form');
         weatherApp.countrySelect = document.createElement('select');
+        // weatherApp.formEl.appendChild(weatherApp.countrySelect);
         const cityOptionDefault = document.createElement('option');
         cityOptionDefault.innerText = "Please choose a country";
         cityOptionDefault.setAttribute("value", "choose");
