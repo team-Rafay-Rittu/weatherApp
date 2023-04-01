@@ -1,20 +1,19 @@
 // create a weather app object
 const weatherApp = {};
 
-// create an apri url for top 50 cities & obtain the api url & api key save in the weather object
-weatherApp.apiUrl = "http://dataservice.accuweather.com/currentconditions/v1/topcities/50";
+// store the api Key
 // weatherApp.apiKey = "DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy" Rittu's back up key
 weatherApp.apiKey = "iKLTvoFgSq9sc5BKM37ihFtikGNp351H"
 
 
 // ** ----------FUNCTION TO GET WEATHER DATA FOR TOP 50 CITIES----------** //
 weatherApp.getCities = () => {
-    weatherApp.url = new URL(weatherApp.apiUrl);
-    weatherApp.url.search = new URLSearchParams({
+    weatherApp.topFiftyUrl = new URL("http://dataservice.accuweather.com/currentconditions/v1/topcities/50");
+    weatherApp.topFiftyUrl.search = new URLSearchParams({
         apikey: weatherApp.apiKey
     });
 
-    fetch(weatherApp.url)
+    fetch(weatherApp.topFiftyUrl)
         .then((response) => {
             if (response.ok) {
                 return response.json();
@@ -47,11 +46,7 @@ weatherApp.getCities = () => {
             });
         })
         .catch((error) => {
-            if (error.name === "TypeError") {
-                alert("We apologize! WeatherApp is currently down. Please return after 24 hours!");
-            } else {
-                alert("Oops! We apologize, something went wrong! Please try again later");
-            }
+            weatherApp.errorHandler(error);
         });
 }
 // ** ----------getCities FUNCTION ENDS----------** //
@@ -59,23 +54,43 @@ weatherApp.getCities = () => {
 
 // ** ---------FUNCTION FOR GETTING ALL COUNTRIES weahterApp.getCountries ---------** //
 weatherApp.getCountries = () => {
+
     //get all regions of the world FIRST with this api call
-    // fetch("http://dataservice.accuweather.com/locations/v1/regions?apikey=DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy") Rittu's back up urk with api key
-    fetch("http://dataservice.accuweather.com/locations/v1/regions?apikey=iKLTvoFgSq9sc5BKM37ihFtikGNp351H")
+    weatherApp.regionsURL = new URL("http://dataservice.accuweather.com/locations/v1/regions");
+    weatherApp.regionsURL.search = new URLSearchParams ({
+        apikey: weatherApp.apiKey
+    })
+
+    fetch(weatherApp.regionsURL)
         .then((response) => {
-            return response.json();
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error(error);
+            }
         })
         .then((jsonResult) => {
-            // create an empty array for the countries
+            
+            // create an empty array which will store all the countries
             weatherApp.countryNames = [];
 
             //loop through the regions to get all countries within that region
             jsonResult.forEach(region => {
+
                 //get all countries in a region with this api call
-                // fetch(`http://dataservice.accuweather.com/locations/v1/countries/${region.ID}?apikey=DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy`) Rittu's url api key backup
-                fetch(`http://dataservice.accuweather.com/locations/v1/countries/${region.ID}?apikey=iKLTvoFgSq9sc5BKM37ihFtikGNp351H`)
+                weatherApp.countriesURL = new URL(`http://dataservice.accuweather.com/locations/v1/countries/${region.ID}`);
+                weatherApp.countriesURL.search = new URLSearchParams ({
+                    apikey: weatherApp.apiKey
+                })
+                
+            
+                fetch(weatherApp.countriesURL)
                     .then((res) => {
-                        return res.json()
+                        if (res.ok) {
+                            return res.json();
+                         } else {
+                            throw new Error(error);
+                        }
                     })
                         .then((result) => {
                                                    
@@ -83,9 +98,20 @@ weatherApp.getCountries = () => {
                             result.forEach(country => {
                                 weatherApp.countryNames.push(country.EnglishName)
                             })
+
+                            //sort countryNames alphabetically
+                            weatherApp.countryNames.sort();
                         })
+                         .catch((error) => {
+                           weatherApp.errorHandler(error);
+                        });
+                        
             })
         })
+        .catch((error) => {
+            weatherApp.errorHandler(error);
+        });
+
 }
 // ** ---------weatherApp.getCountries FUNCTION ENDS ---------** //
 
@@ -104,7 +130,11 @@ weatherApp.searchCity = (city, country) => {
     fetch(weatherApp.citySearchUrl)
         .then((response) => {
             //response is location data for a city or multiple cities 
-            return response.json()
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error(error);
+            }
         })
 
             .then((citySearchResult) => {
@@ -164,6 +194,9 @@ weatherApp.searchCity = (city, country) => {
 
                 }
             })
+            .catch((error) => {
+                weatherApp.errorHandler(error);
+            });
 }
 // ** ---------FUNCTION FOR SEARCHING FOR A CITY ENDS ---------** //
 
@@ -172,9 +205,18 @@ weatherApp.searchCity = (city, country) => {
 weatherApp.getCityWeather = (cityData) => {
     //get the location data which was passed into this function when called and get the location Key
     //make the API call for weather data for a particular city with the location Key
-    fetch(`http://dataservice.accuweather.com/currentconditions/v1/${cityData.Key}?apikey=iKLTvoFgSq9sc5BKM37ihFtikGNp351H`)
+    weatherApp.cityWeatherURL = new URL(`http://dataservice.accuweather.com/currentconditions/v1/${cityData.Key}`);
+    weatherApp.cityWeatherURL.search = new URLSearchParams ({
+        apikey: weatherApp.apiKey
+    })
+
+    fetch(weatherApp.cityWeatherURL)
         .then((response) => {
-            return response.json();
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error(error);
+            }
         })
             .then((cityWeather) => {
                 //the API result contains weatherData, we have to attach city name and country information to the weatherData
@@ -184,6 +226,9 @@ weatherApp.getCityWeather = (cityData) => {
                 //call the displayWeatherStats with the city name and weather data
                 weatherApp.displayWeatherStats(cityData.EnglishName, cityWeather);
             })
+            .catch((error) => {
+                weatherApp.errorHandler(error);
+            });
 }
 // **---------FUNCTION TO GET THE WEATHER DATA OF A CITY ENDS --------- ** //
 
@@ -193,13 +238,7 @@ weatherApp.getCityWeather = (cityData) => {
 weatherApp.displayWeatherStats = (passedCity, weatherData) => {
    
     //clear existing data and show the MORE OPTIONS button
-    weatherApp.cityFlagDiv.innerHTML = "";
-    weatherApp.div.innerHTML = "";
-    if (weatherApp.citySearchDiv) {
-        weatherApp.citySearchDiv.innerHTML = "";
-    }
-
-    weatherApp.moreOptions.style.display = "block";
+    weatherApp.clearData()
     
     //loop through the weatherData to find weather data for users selected city
     weatherData.forEach(city => {
@@ -283,6 +322,32 @@ weatherApp.displayWeatherStats = (passedCity, weatherData) => {
     weatherApp.cityFlagDiv.appendChild(weatherApp.nameOfCity);
 
 }
+// ** ---------FUNCTION FOR DISPLAYING WEATHER STATS ENDS ---------** //
+
+
+// ** ---------FUNCTION THAT CLEARS DATA FROM THE PAGE ---------** //
+weatherApp.clearData = () => {
+     //clear existing data and show the MORE OPTIONS button
+    weatherApp.cityFlagDiv.innerHTML = "";
+    weatherApp.div.innerHTML = "";
+    if (weatherApp.citySearchDiv) {
+        weatherApp.citySearchDiv.innerHTML = "";
+    }
+
+    weatherApp.moreOptions.style.display = "block";
+}
+// ** ---------FUNCTION THAT CLEARS DATA FROM THE PAGE ENDS ---------** //
+
+
+// ** ---------ERROR HANDLING FUNCTION STARTS ---------** //
+weatherApp.errorHandler = (error) => {
+    if (error.name === "TypeError") {
+        alert("We apologize! WeatherApp is currently down. Please return after 24 hours!");
+    } else {
+        alert("Oops! We apologize, something went wrong! Please try again later");
+    }
+}
+// ** ---------ERROR HANDLING FUNCTION ENDS ---------** //
 
 
 //** --------- ATTACHED ALL THE EVENT LISTENERS TO THIS FUNCTION BELOW ---------**//
@@ -301,13 +366,7 @@ weatherApp.allEventListeners = () => {
         weatherApp.userCity = weatherApp.dropDown.value;
 
         //clear existing data and show the MORE OPTIONS button
-        weatherApp.cityFlagDiv.innerHTML = "";
-        weatherApp.div.innerHTML = "";
-        if (weatherApp.citySearchDiv) {
-            weatherApp.citySearchDiv.innerHTML = "";
-        }
-
-        weatherApp.moreOptions.style.display = "block";
+        weatherApp.clearData();
         
         //call the display weather stats function with the users selected city
         //if they haven't chosen a city, alert the user to select a city
@@ -337,13 +396,8 @@ weatherApp.allEventListeners = () => {
         weatherApp.randomCity = weatherApp.weatherData[weatherApp.randomNum].EnglishName;
 
         ///clear existing data and show the MORE OPTIONS button
-        weatherApp.cityFlagDiv.innerHTML = "";
-        weatherApp.div.innerHTML = "";
-        if (weatherApp.citySearchDiv) {
-            weatherApp.citySearchDiv.innerHTML = "";
-        }
-
-        weatherApp.moreOptions.style.display = "block";
+        weatherApp.clearData();
+        
         // when user clicks on random button, city select drop down should return to default
         weatherApp.dropDown.value = "choose";
 
@@ -362,9 +416,6 @@ weatherApp.allEventListeners = () => {
     weatherApp.moreOptions.addEventListener('click', function (event) {
 
         event.preventDefault();
-
-        //sort countryNames which we got using getCountries function
-        weatherApp.countryNames.sort();
 
         //when More Options button is clicked, it will be hidden
         weatherApp.moreOptions.style.display = "none";
@@ -421,7 +472,7 @@ weatherApp.allEventListeners = () => {
 
 // **--------- MORE OPTIONS BUTTON EVENT LISTENER ENDS---------** //
 
-    // **---------CITY SEARCH BUTTON EVENT ONE LISTENER STARTS---------** //
+    // **---------INPUT EVENT LISTENER STARTS---------** //
         weatherApp.citySearchBar.addEventListener('keypress', function (event) {
             
             if (event.keyCode === 13) {
@@ -441,9 +492,9 @@ weatherApp.allEventListeners = () => {
                 
             }
         });
-    // **---------CITY SEARCH BUTTON EVENT ONE LISTENER ENDS---------** //
+    // **---------INPUT LISTENER ENDS---------** //
 
-    // **--------- CITY SEARCH BUTTON EVENT TWO LISTENER STARTS--------- ** //
+    // **--------- CITY SEARCH BUTTON EVENT LISTENER STARTS--------- ** //
         weatherApp.citySearchButton.addEventListener('click', function (event) {
 
             event.preventDefault();
@@ -496,5 +547,3 @@ weatherApp.init = () => {
 
 // call the init method
 weatherApp.init();
-
-
