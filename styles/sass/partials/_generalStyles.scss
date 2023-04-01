@@ -60,6 +60,7 @@ h3 {
   // padding-bottom: 40px;
   flex-direction: column;
 }
+
 .buttonContainer {
   display: flex;
   flex-direction: column;
@@ -140,12 +141,12 @@ li {
 }
 
 #citySearchBar {
-border-radius: 15px;
-padding: 10px 10px;
-width: 80%;
-margin-top: 20px;
-max-width: 377px;
-font-family: 'Tilt Neon', cursive;
+  border-radius: 15px;
+  padding: 10px 10px;
+  width: 80%;
+  margin-top: 20px;
+  max-width: 377px;
+  font-family: 'Tilt Neon', cursive;
 }
 
 .searchInstructions {
