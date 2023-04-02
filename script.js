@@ -8,6 +8,7 @@ weatherApp.apiKey = "iKLTvoFgSq9sc5BKM37ihFtikGNp351H"
 
 // ** ----------FUNCTION TO GET WEATHER DATA FOR TOP 50 CITIES----------** //
 weatherApp.getCities = () => {
+    // api url to get top 50 cities weather data
     weatherApp.topFiftyUrl = new URL("http://dataservice.accuweather.com/currentconditions/v1/topcities/50");
     weatherApp.topFiftyUrl.search = new URLSearchParams({
         apikey: weatherApp.apiKey
@@ -18,12 +19,12 @@ weatherApp.getCities = () => {
             if (response.ok) {
                 return response.json();
             } else {
+                // error handling
                 throw new Error(error);
             }
         })
-
         .then((jsonResult) => {
-            //store the jsonResult data (which contains all the weather data for top 50 cities) in the weatherApp object
+            // store the jsonResult data (which contains all the weather data for top 50 cities) in the weatherApp object
             weatherApp.weatherData = jsonResult;
 
             // creating new array filling it from json result object of country names
@@ -31,10 +32,10 @@ weatherApp.getCities = () => {
                 return object.EnglishName;
             });
         
-            //sort the city names by alphabet order
+            // sort the city names by alphabet order
             weatherApp.cityNames.sort();
             
-            //populate the citySelect element (line 40 in html) with city names alphabetically using weatherApp.cityNames array
+            // populate the citySelect element with city names alphabetically using weatherApp.cityNames array
             weatherApp.cityNames.forEach(city => {
 
                 // create an option element for each city and attach it to the citySelect element
@@ -45,6 +46,7 @@ weatherApp.getCities = () => {
                 weatherApp.dropDown.appendChild(cityElement);
             });
         })
+        // error handling
         .catch((error) => {
             weatherApp.errorHandler(error);
         });
@@ -66,6 +68,7 @@ weatherApp.getCountries = () => {
             if (response.ok) {
                 return response.json();
             } else {
+                //error handling
                 throw new Error(error);
             }
         })
@@ -74,40 +77,42 @@ weatherApp.getCountries = () => {
             // create an empty array which will store all the countries
             weatherApp.countryNames = [];
 
-            //loop through the regions to get all countries within that region
+            // loop through the regions to get all countries within that region
             jsonResult.forEach(region => {
 
-                //get all countries in a region with this api call
+                // get all countries in a region with this api call
                 weatherApp.countriesURL = new URL(`http://dataservice.accuweather.com/locations/v1/countries/${region.ID}`);
                 weatherApp.countriesURL.search = new URLSearchParams ({
                     apikey: weatherApp.apiKey
                 })
                 
-            
                 fetch(weatherApp.countriesURL)
                     .then((res) => {
                         if (res.ok) {
                             return res.json();
                          } else {
+                            // error handling
                             throw new Error(error);
                         }
                     })
-                        .then((result) => {
-                                                   
-                            //loop through the result to get all countries
-                            result.forEach(country => {
-                                weatherApp.countryNames.push(country.EnglishName)
-                            })
-
-                            //sort countryNames alphabetically
-                            weatherApp.countryNames.sort();
+                    .then((result) => {
+                                                
+                        // loop through the result to get all countries
+                        result.forEach(country => {
+                            weatherApp.countryNames.push(country.EnglishName)
                         })
-                         .catch((error) => {
-                           weatherApp.errorHandler(error);
-                        });
+
+                        // sort countryNames alphabetically
+                        weatherApp.countryNames.sort();
+                    })
+                    // error handling
+                    .catch((error) => {
+                        weatherApp.errorHandler(error);
+                    });
                         
             })
         })
+        // error handling
         .catch((error) => {
             weatherApp.errorHandler(error);
         });
@@ -118,7 +123,7 @@ weatherApp.getCountries = () => {
 
 // ** ---------FUNCTION FOR SEARCHING FOR A CITY ---------** //
 weatherApp.searchCity = (city, country) => {
-    //api call for searching for a city. Search parameters are "city country"
+    // api call for searching for a city. Search parameters are "city country"
     weatherApp.searchUrl = "http://dataservice.accuweather.com/locations/v1/cities/search";
 
     weatherApp.citySearchUrl = new URL(weatherApp.searchUrl);
@@ -129,82 +134,83 @@ weatherApp.searchCity = (city, country) => {
 
     fetch(weatherApp.citySearchUrl)
         .then((response) => {
-            //response is location data for a city or multiple cities 
+            // response is location data for a city or multiple cities 
             if (response.ok) {
                 return response.json();
             } else {
+                // error handling
                 throw new Error(error);
             }
         })
-
-            .then((citySearchResult) => {
-                //3 possibilities exist when searching for a city.  The city doesn't exist so the result will have a lenght of 0
-                if (citySearchResult.length === 0) {
-                    alert("No such city exists in the specified country.  Please check the spelling and try again")
-                //if there is only 1 city that matches the search, call the getCityWeather function and pass in the location data
-                } else if (citySearchResult.length === 1) {
-                    weatherApp.getCityWeather(citySearchResult[0]);
-                //if there are multiple cities that match the search
-                } else if (citySearchResult.length > 1) {
-                    // container for radio buttons for multiple cities with the same name
-                    weatherApp.allRadioButtons = document.createElement('div');
-                    weatherApp.allRadioButtons.setAttribute('class', 'allRadioButtonsContainer')
+        .then((citySearchResult) => {
+            // 3 possibilities exist when searching for a city.  The city doesn't exist so the result will have a length of 0
+            if (citySearchResult.length === 0) {
+                alert("No such city exists in the specified country.  Please check the spelling and try again")
+            // if there is only 1 city that matches the search, call the getCityWeather function and pass in the location data
+            } else if (citySearchResult.length === 1) {
+                weatherApp.getCityWeather(citySearchResult[0]);
+            // if there are multiple cities that match the search
+            } else if (citySearchResult.length > 1) {
+                // container for radio buttons for multiple cities with the same name
+                weatherApp.allRadioButtons = document.createElement('div');
+                weatherApp.allRadioButtons.setAttribute('class', 'allRadioButtonsContainer')
+                
+                // loop through the result which contains location data for multiple cities with the same name
+                citySearchResult.forEach(city => {
+                    // create a div that contains radio button and an associated label for each city
+                    const radioDiv = document.createElement('div');
+                    radioDiv.setAttribute('class', 'singleRadioContainer');
+                    const cityLabel = document.createElement('label');
+                    cityLabel.setAttribute('for', `${city.Key}`);
+                    cityLabel.innerText = `${city.EnglishName}, ${city.AdministrativeArea.EnglishName}, ${city.Country.EnglishName}, ${city.PrimaryPostalCode}`; 
                     
-                    //loop through the result which contains location data for multiple cities with the same name
-                    citySearchResult.forEach(city => {
-                        //create a div that contains radio button and an associated label for each city
-                        weatherApp.radioDiv = document.createElement('div');
-                        weatherApp.radioDiv.setAttribute('class', 'singleRadioContainer');
-                        const cityLabel = document.createElement('label');
-                        cityLabel.setAttribute('for', `${city.Key}`);
-                        cityLabel.innerText = `${city.EnglishName}, ${city.AdministrativeArea.EnglishName}, ${city.Country.EnglishName}, ${city.PrimaryPostalCode}`; 
-                        
-                        const cityRadio = document.createElement('input');
-                        cityRadio.setAttribute('type', 'radio');
-                        cityRadio.setAttribute('name', 'multipleCities');
-                        cityRadio.setAttribute('value', `${city.Key}`);
-                        cityRadio.setAttribute('id', `${city.Key}`);
+                    const cityRadio = document.createElement('input');
+                    cityRadio.setAttribute('type', 'radio');
+                    cityRadio.setAttribute('name', 'multipleCities');
+                    cityRadio.setAttribute('value', `${city.Key}`);
+                    cityRadio.setAttribute('id', `${city.Key}`);
 
-                        weatherApp.radioDiv.appendChild(cityRadio);
-                        weatherApp.radioDiv.appendChild(cityLabel);
-                        
-                        weatherApp.allRadioButtons.appendChild(weatherApp.radioDiv);
-                        
-                    })
-
-                    weatherApp.citySearchDiv.appendChild(weatherApp.allRadioButtons);
+                    radioDiv.appendChild(cityRadio);
+                    radioDiv.appendChild(cityLabel);
                     
-                    //group all the radio buttons together in the variable radioGroup
-                    const radioGroup = document.querySelectorAll('input[name="multipleCities"]')
+                    weatherApp.allRadioButtons.appendChild(radioDiv);
+                })
 
-                    //when a change is detected, call getCityWeather function and pass in the location data for the city which the user selected with a radio button
-                    for (let i = 0; i < radioGroup.length; i++) {
-                        // created event listener for each radio button that will prevent the default submit action when the enter key was press
-                        radioGroup[i].addEventListener('keypress', function (event) {
-                            if (event.keyCode === 13) {
-                                event.preventDefault();
-                                weatherApp.getCityWeather(citySearchResult[i]);
-                            }  
-                        }) 
-                        // created another event listener when user selects radio button, getCityWeather will run.
-                        radioGroup[i].addEventListener('change', function () {
+                weatherApp.citySearchDiv.appendChild(weatherApp.allRadioButtons);
+                
+                // group all the radio buttons together in the variable radioGroup
+                const radioGroup = document.querySelectorAll('input[name="multipleCities"]')
+
+                // when Enter key is pressed call getCityWeather function and pass in the location data for the city which the user selected with a radio button
+                for (let i = 0; i < radioGroup.length; i++) {
+                    // created event listener for each radio button that will prevent the default submit action when the enter key was press
+                    radioGroup[i].addEventListener('keypress', function (event) {
+                        if (event.keyCode === 13) {
+
+                            event.preventDefault();
                             weatherApp.getCityWeather(citySearchResult[i]);
-                        })   
-                    }
-
+                        }  
+                    }) 
+                    // created another event listener when user selects radio button, getCityWeather will run.
+                    radioGroup[i].addEventListener('change', function () {
+                        weatherApp.getCityWeather(citySearchResult[i]);
+                    })   
                 }
-            })
-            .catch((error) => {
-                weatherApp.errorHandler(error);
-            });
+
+            }
+        })
+        // error handling
+        .catch((error) => {
+            weatherApp.errorHandler(error);
+        });
 }
 // ** ---------FUNCTION FOR SEARCHING FOR A CITY ENDS ---------** //
 
 
 // **---------FUNCTION TO GET THE WEATHER DATA OF A SEARCHED CITY--------- ** //
 weatherApp.getCityWeather = (cityData) => {
-    //get the location data which was passed into this function when called and get the location Key
-    //make the API call for weather data for a particular city with the location Key
+    // get the location data which was passed into this function when called and get the location Key
+    // make the API call for weather data for a particular city with the location Key
     weatherApp.cityWeatherURL = new URL(`http://dataservice.accuweather.com/currentconditions/v1/${cityData.Key}`);
     weatherApp.cityWeatherURL.search = new URLSearchParams ({
         apikey: weatherApp.apiKey
@@ -215,71 +221,73 @@ weatherApp.getCityWeather = (cityData) => {
             if (response.ok) {
                 return response.json();
             } else {
+                // error handling
                 throw new Error(error);
             }
         })
-            .then((cityWeather) => {
-                //the API result contains weatherData, we have to attach city name and country information to the weatherData
-                cityWeather[0].Country = cityData.Country;
-                cityWeather[0].EnglishName = cityData.EnglishName;
+        .then((cityWeather) => {
+            // the API result contains weatherData, we have to attach city name and country information to the weatherData
+            cityWeather[0].Country = cityData.Country;
+            cityWeather[0].EnglishName = cityData.EnglishName;
 
-                //call the displayWeatherStats with the city name and weather data
-                weatherApp.displayWeatherStats(cityData.EnglishName, cityWeather);
-            })
-            .catch((error) => {
-                weatherApp.errorHandler(error);
-            });
+            // call the displayWeatherStats with the city name and weather data
+            weatherApp.displayWeatherStats(cityData.EnglishName, cityWeather);
+        })
+        // error handling
+        .catch((error) => {
+            weatherApp.errorHandler(error);
+        });
 }
 // **---------FUNCTION TO GET THE WEATHER DATA OF A CITY ENDS --------- ** //
 
 
 // ** ---------FUNCTION FOR DISPLAYING WEATHER STATS ---------** //
-//this function will display the weather stats for the users selected city or random city or their searched city
+// this function will display the weather stats for the users selected city or random city or their searched city
 weatherApp.displayWeatherStats = (passedCity, weatherData) => {
    
-    //clear existing data and show the MORE OPTIONS button
+    // clear existing data and show the MORE OPTIONS button
     weatherApp.clearData()
     
-    //loop through the weatherData to find weather data for users selected city
+    // loop through the weatherData to find weather data for users selected city
     weatherData.forEach(city => {
         if (passedCity === city.EnglishName) {
 
-            //get the city's weather data and store it in the weatherApp object
+            // get the city's weather data and store it in the weatherApp object
             weatherApp.currentTemp = `${city.Temperature.Metric.Value} ${city.Temperature.Metric.Unit}`;
             weatherApp.fahrenheit = `${city.Temperature.Imperial.Value} ${city.Temperature.Imperial.Unit}`;
             weatherApp.currentWeatherText = city.WeatherText;
             weatherApp.weatherIcon = city.WeatherIcon;
 
-            //get the city's geographical information
+            // get the city's geographical information
             weatherApp.cityName = city.EnglishName;
             weatherApp.countryName = city.Country.EnglishName;
             weatherApp.countryId = city.Country.ID;        
         }
     });
    
-    //target the ul which will display weather information and clear it
+    // target the ul which will display weather information and clear it
     weatherApp.ul = document.querySelector('#weatherStats');
     weatherApp.ul.innerHTML = "";
    
-    //create child li elements for displaying weather data
+    // create child li elements for displaying weather data
     weatherApp.tempLi = document.createElement('li');
-    weatherApp.weatherTextLi = document.createElement('li');
-    weatherApp.precipitationLi = document.createElement('li');
+    const weatherTextLi = document.createElement('li');
+    const precipitationLi = document.createElement('li');
     
     // create img element for weather icon
-    weatherApp.displayIcon = document.createElement('img');
-    weatherApp.displayIcon.setAttribute('src', `./assets/${weatherApp.weatherIcon}.png`);
-    weatherApp.displayIcon.setAttribute('alt', `Weather is ${weatherApp.currentWeatherText} icon`);
+    const displayIcon = document.createElement('img');
+    displayIcon.setAttribute('src', `./assets/${weatherApp.weatherIcon}.png`);
+    displayIcon.setAttribute('alt', `Weather is ${weatherApp.currentWeatherText} icon`);
     
-    //add the weather data to the list elements
+    // add the weather data to the list elements
     weatherApp.tempLi.innerText = weatherApp.currentTemp;
-    weatherApp.weatherTextLi.innerText = weatherApp.currentWeatherText;
+    weatherTextLi.innerText = weatherApp.currentWeatherText;
 
-    //append the li elements to the ul
+    // append the li elements to the ul
     weatherApp.ul.appendChild(weatherApp.tempLi);
-    weatherApp.ul.appendChild(weatherApp.weatherTextLi);
-    weatherApp.ul.appendChild(weatherApp.precipitationLi);
-    weatherApp.precipitationLi.appendChild(weatherApp.displayIcon);
+    weatherApp.ul.appendChild(weatherTextLi);
+    weatherApp.ul.appendChild(precipitationLi);
+    precipitationLi.appendChild(displayIcon);
    
     // create a button to convert celsius to fahrenheit
     weatherApp.convertButton = document.createElement('button');
@@ -308,18 +316,18 @@ weatherApp.displayWeatherStats = (passedCity, weatherData) => {
         };
     });
 
-    //create img element for country flag using the flagsapi website and add it to the page
-    weatherApp.flag = document.createElement('img')
-    weatherApp.flag.setAttribute('src', `https://flagsapi.com/${weatherApp.countryId}/shiny/64.png`)
-    weatherApp.flag.setAttribute('alt', `Flag of ${weatherApp.countryName}`)
+    // create img element for country flag using the flagsapi website and add it to the page
+    const flag = document.createElement('img')
+    flag.setAttribute('src', `https://flagsapi.com/${weatherApp.countryId}/shiny/64.png`)
+    flag.setAttribute('alt', `Flag of ${weatherApp.countryName}`)
 
-    weatherApp.cityFlagDiv.appendChild(weatherApp.flag);
+    weatherApp.cityFlagDiv.appendChild(flag);
 
-     //create a h3 element which will display city name and add it to the page
-    weatherApp.nameOfCity = document.createElement('h3');
-    weatherApp.nameOfCity.innerText = weatherApp.cityName;
+    // create a h3 element which will display city name and add it to the page
+    const nameOfCity = document.createElement('h3');
+    nameOfCity.innerText = weatherApp.cityName;
 
-    weatherApp.cityFlagDiv.appendChild(weatherApp.nameOfCity);
+    weatherApp.cityFlagDiv.appendChild(nameOfCity);
 
 }
 // ** ---------FUNCTION FOR DISPLAYING WEATHER STATS ENDS ---------** //
@@ -327,7 +335,7 @@ weatherApp.displayWeatherStats = (passedCity, weatherData) => {
 
 // ** ---------FUNCTION THAT CLEARS DATA FROM THE PAGE ---------** //
 weatherApp.clearData = () => {
-     //clear existing data and show the MORE OPTIONS button
+    // clear existing data and show the MORE OPTIONS button
     weatherApp.cityFlagDiv.innerHTML = "";
     weatherApp.div.innerHTML = "";
     if (weatherApp.citySearchDiv) {
@@ -340,6 +348,7 @@ weatherApp.clearData = () => {
 
 
 // ** ---------ERROR HANDLING FUNCTION STARTS ---------** //
+// this function handles potential errors
 weatherApp.errorHandler = (error) => {
     if (error.name === "TypeError") {
         alert("We apologize! WeatherApp is currently down. Please return after 24 hours!");
@@ -355,21 +364,22 @@ weatherApp.errorHandler = (error) => {
 weatherApp.allEventListeners = () => {
     // ** ---------SUBMIT BUTTON EVENT LISTENER ---------** //
 
-    //target the "Submit" button
-    weatherApp.submitButton = document.querySelector('#submit');
+    // target the "Submit" button
+    const submitButton = document.querySelector('#submit');
 
-    //add event listener to the "Submit" button
-    weatherApp.submitButton.addEventListener('click', function (event) {
+    // add event listener to the "Submit" button
+    submitButton.addEventListener('click', function (event) {
+
         event.preventDefault();
-
-        //find out which city user has selected from drop down menu
-        weatherApp.userCity = weatherApp.dropDown.value;
-
-        //clear existing data and show the MORE OPTIONS button
+        
+        // clear existing data and show the MORE OPTIONS button
         weatherApp.clearData();
         
-        //call the display weather stats function with the users selected city
-        //if they haven't chosen a city, alert the user to select a city
+        // find out which city user has selected from drop down menu
+        weatherApp.userCity = weatherApp.dropDown.value;
+
+        // call the display weather stats function with the users selected city
+        // if they haven't chosen a city, alert the user to select a city
         if (weatherApp.userCity === "choose") {
             alert("Please select a city from the dropdown menu");
         } else {
@@ -382,26 +392,26 @@ weatherApp.allEventListeners = () => {
     // **--------- RANDOM BUTTON EVENT LISTENER  ---------**//
 
     // target the 'random' button
-    weatherApp.randomButton = document.querySelector('#random');
+    const randomButton = document.querySelector('#random');
 
     // create an event listener
-    weatherApp.randomButton.addEventListener('click', function (event) {
-
+    randomButton.addEventListener('click', function (event) {
+        
         event.preventDefault();
-
-        //generate a random number to select a random city from the list of 50 cities
-        weatherApp.randomNum = Math.floor(Math.random() * 50);
-
-        //select a random city based on the random number
-        weatherApp.randomCity = weatherApp.weatherData[weatherApp.randomNum].EnglishName;
-
-        ///clear existing data and show the MORE OPTIONS button
+        
+        // clear existing data and show the MORE OPTIONS button
         weatherApp.clearData();
         
+        // generate a random number to select a random city from the list of 50 cities
+        weatherApp.randomNum = Math.floor(Math.random() * 50);
+
+        // select a random city based on the random number
+        weatherApp.randomCity = weatherApp.weatherData[weatherApp.randomNum].EnglishName;
+
         // when user clicks on random button, city select drop down should return to default
         weatherApp.dropDown.value = "choose";
 
-        //call the display weather stats function with random city
+        // call the display weather stats function with random city
         weatherApp.displayWeatherStats(weatherApp.randomCity, weatherApp.weatherData);
     });
 // **--------- RANDOM BUTTON EVENT LISTENER ENDS--------- ** //
@@ -417,29 +427,29 @@ weatherApp.allEventListeners = () => {
 
         event.preventDefault();
 
-        //when More Options button is clicked, it will be hidden
+        // when More Options button is clicked, it will be hidden
         weatherApp.moreOptions.style.display = "none";
 
-        //create a paragraph with instructions, a dropdown menu with all the countries
-        //and an input with type text for user to enter a city name and click the City Search button
-        //target the citySearch div element to contain the above elements
+        // create a paragraph with instructions, a dropdown menu with all the countries
+        // and an input with type text for user to enter a city name and click the City Search button
+        // target the citySearch div element to contain the above elements
         weatherApp.citySearchDiv = document.querySelector('.citySearch');
 
-        //paragraph element creation and appending
-        weatherApp.citySearchP = document.createElement('p');
-        weatherApp.citySearchP.innerText = "Please select a country from the dropdown menu and type the name of a city in the search bar below to get the weather forecast for any city in the world.";
-        weatherApp.citySearchP.setAttribute('class', 'searchInstructions');
-        weatherApp.citySearchDiv.appendChild(weatherApp.citySearchP);
+        // paragraph element creation and appending
+        const citySearchP = document.createElement('p');
+        citySearchP.innerText = "Please select a country from the dropdown menu and type the name of a city in the search bar below to get the weather forecast for any city in the world.";
+        citySearchP.setAttribute('class', 'searchInstructions');
+        weatherApp.citySearchDiv.appendChild(citySearchP);
 
 
-        //select element creation with a "Please choose country " option element appending
+        // select element creation with a "Please choose country " option element appending
         weatherApp.countrySelect = document.createElement('select');
         const cityOptionDefault = document.createElement('option');
         cityOptionDefault.innerText = "Please choose a country";
         cityOptionDefault.setAttribute("value", "choose");
         weatherApp.countrySelect.appendChild(cityOptionDefault);
 
-        //looping through the country names and creating an option element for each country and appending it to the select element
+        // looping through the country names and creating an option element for each country and appending it to the select element
         weatherApp.countryNames.forEach(country => {
             const countryOption = document.createElement('option');
             countryOption.innerText = country;
@@ -447,23 +457,23 @@ weatherApp.allEventListeners = () => {
             weatherApp.countrySelect.appendChild(countryOption);
         })
 
-        //append the select element to the parent div
+        // append the select element to the parent div
         weatherApp.citySearchDiv.appendChild(weatherApp.countrySelect)
 
-        //create and append a label for the input search bar
-        weatherApp.citySearchLabel = document.createElement('label')
-        weatherApp.citySearchLabel.innerText = "Please enter a city name in the search bar:";
-        weatherApp.citySearchLabel.setAttribute('for', 'citySearchBar');
-        weatherApp.citySearchDiv.appendChild(weatherApp.citySearchLabel);
+        // create and append a label for the input search bar
+        const citySearchLabel = document.createElement('label')
+        citySearchLabel.innerText = "Please enter a city name in the search bar:";
+        citySearchLabel.setAttribute('for', 'citySearchBar');
+        weatherApp.citySearchDiv.appendChild(citySearchLabel);
 
-        //create and apppend the input search bar
+        // create and apppend the input search bar
         weatherApp.citySearchBar = document.createElement('input');
         weatherApp.citySearchBar.setAttribute('id', "citySearchBar");
         weatherApp.citySearchBar.setAttribute('type', "text");
         weatherApp.citySearchBar.setAttribute('placeholder', "City Name");
         weatherApp.citySearchDiv.appendChild(weatherApp.citySearchBar);
 
-        //create a city search button and append it to the div
+        // create a city search button and append it to the div
         weatherApp.citySearchButton = document.createElement('button');
         weatherApp.citySearchButton.setAttribute('id', 'citySearchButton');
         weatherApp.citySearchButton.setAttribute('type', 'submit');
@@ -474,14 +484,17 @@ weatherApp.allEventListeners = () => {
 
     // **---------INPUT EVENT LISTENER STARTS---------** //
         weatherApp.citySearchBar.addEventListener('keypress', function (event) {
-            
+            // this listener will run when "Enter" key is pressed
             if (event.keyCode === 13) {
+                
                 event.preventDefault();
+                // making sure the user selects a country and enters a city name in the input field
                 if (weatherApp.citySearchBar.value === "") {
                     alert("Please enter a city name in the search bar");
                 } else if (weatherApp.countrySelect.value === "choose") {
                     alert("Please select a country from the dropdown menu");
                 } else {
+                    // clear any radio buttons if they exist and call the citySearch function
                     if (weatherApp.allRadioButtons) {
                         weatherApp.allRadioButtons.innerHTML = "";
                         weatherApp.searchCity(weatherApp.citySearchBar.value, weatherApp.countrySelect.value)
@@ -499,18 +512,19 @@ weatherApp.allEventListeners = () => {
 
             event.preventDefault();
 
-            //get the city name from the input and the country name from the dropdown menu and call the searchCity function
-            //if either the country name is not selected or city name is not entered, alert the user to do so
+            // get the city name from the input and the country name from the dropdown menu and call the searchCity function
+            // if either the country name is not selected or city name is not entered, alert the user to do so
             if (weatherApp.citySearchBar.value === "") {
                 alert("Please enter a city name in the search bar");
             } else if (weatherApp.countrySelect.value === "choose") {
                 alert("Please select a country from the dropdown menu");
             } else {
+                // clear any radio buttons if they exist and call the citySearch function
                 if (weatherApp.allRadioButtons) {
                     weatherApp.allRadioButtons.innerHTML = "";
                     weatherApp.searchCity(weatherApp.citySearchBar.value, weatherApp.countrySelect.value)
                 } else {
-                weatherApp.searchCity(weatherApp.citySearchBar.value, weatherApp.countrySelect.value)
+                    weatherApp.searchCity(weatherApp.citySearchBar.value, weatherApp.countrySelect.value)
                 }
             }
         })
