@@ -1,1 +1,71 @@
-this is index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App</title>
+  <link rel="stylesheet" href="./styles/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Manrope:wght@500&family=Tilt+Neon&display=swap" rel="stylesheet">
+
+
+</head>
+<body>
+  
+  <header>
+    <div class="wrapper flexHeading">
+      <h1>Welcome to the Weather App</h1>
+    </div>
+  </header>
+ 
+  <main>
+    <div class="wrapper">
+      <div class="fadeIn">
+        <h2>Stay one step ahead of Mother Nature with our weather app</h2>
+        <h3>Get real-time weather statistics and forecasts at your fingertips!</h3>
+      </div>
+    </div> <!-- wrapper END. -->
+
+    <div class="gradient">
+      <div class="wrapper">
+        <p class="instructions"> 
+          Select a choice of 50 unique cities worldwide from the dropdown menu below and click "submit" to see the weather results, or click on
+          "I'm feeling sunny" to get weather results for a random city destination.
+        </p>
+
+        <section class="citySelectFlex">
+          <form action="">
+            <select name="citySelect" id="citySelect">
+              <option value="choose">Please choose a city</option>
+            </select>
+            <div class="buttonContainer">
+              <button type="submit" id="submit">Submit</button>
+              <button type="submit" id="random" class="random">I'm feeling sunny</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="weatherInfo">
+            <div class="cityFlag"></div>
+              <ul id="weatherStats" class="weatherStats"></ul>
+            <div id="conversion" class="conversion"></div>
+        </section>
+
+        <section class="search">
+          <form action="" id="moreOptionsForm">
+              <button class="moreOptions">Click for more options</button>
+            <div class="citySearch"></div>
+          </form>
+        </section>
+      </div> <!-- wrapper END. -->
+    </div> <!-- gradient END. -->
+  </main>
+
+  <footer>
+    <p><a href="https://www.junocollege.com">Made at Juno College &copy</a></p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

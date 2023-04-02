@@ -1,0 +1,37 @@
+body,
+button,
+select {
+  text-align: center;
+  font-family: 'Comfortaa', cursive;
+  font-weight: 400;
+}
+
+option {
+  font-family: 'Tilt Neon', cursive;
+  font-weight: 400;
+}
+
+h1 {
+  font-family: 'Tilt Neon', cursive;
+  font-weight: 700;
+  font-size: 36px
+}
+
+h2, 
+h3 {
+  font-family: 'Manrope', sans-serif;
+}
+
+h2,
+h3,
+p,
+button,
+li {
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+p {
+  text-align: left;
+  line-height: 1.5;
+}
