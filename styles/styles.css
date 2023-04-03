@@ -242,7 +242,7 @@ option {
 h1 {
   font-family: "Tilt Neon", cursive;
   font-weight: 700;
-  font-size: 36px;
+  font-size: 42px;
 }
 
 h2,
@@ -474,6 +474,7 @@ li {
   padding: 10px 10px;
   width: 80%;
   margin-top: 20px;
+  margin-bottom: 20px;
   max-width: 377px;
   font-family: "Tilt Neon", cursive;
 }
