@@ -76,15 +76,19 @@ button {
   box-shadow: 14px 14px 10px -1px rgba(71, 74, 64, 0.7);
   padding: 10px 10px;
   max-width: 330px;
+  color: black;
+  background-color: #e3e1dd;
   cursor: pointer;
   transition: all;
   position: relative;
   top: 0px;
   &:hover {
       background-color: rgb(242, 242, 157);
+      color: black;
     }
   &:focus {
       background-color: rgb(242, 242, 157);
+      color: black;
     }
 }
 
@@ -101,6 +105,12 @@ select {
   border-radius: 15px;
   border: none;
   max-width: 550px;
+  &:hover {
+    border: solid 2px #28455e;
+  }
+  &:focus {
+    border: solid 2px #28455e;
+  }
 }
 
 ul {
