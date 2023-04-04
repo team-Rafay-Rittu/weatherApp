@@ -297,7 +297,7 @@ weatherApp.displayWeatherStats = (passedCity, weatherData) => {
     // add a class & Id attribute, & text to the convertButton
     weatherApp.convertButton.setAttribute('class', 'convert');
     weatherApp.convertButton.setAttribute('id', 'convert');
-    weatherApp.convertButton.innerText = "Convert to F";
+    weatherApp.convertButton.innerText = "Convert to ℉";
 
     // append convert button
     weatherApp.div.appendChild(weatherApp.convertButton);
@@ -310,10 +310,10 @@ weatherApp.displayWeatherStats = (passedCity, weatherData) => {
         // Changing the temperature from celsius to fahrenheit
         weatherApp.tempLi.innerText = weatherApp.fahrenheit;
             // text on button will change to "convert to c" when user clicks on the "convert to F" button and will change to imperial value and back to metric
-        if (weatherApp.convertButton.innerText === "Convert to F") {
-            weatherApp.convertButton.innerText = "Convert to C";
+        if (weatherApp.convertButton.innerText === "Convert to ℉") {
+            weatherApp.convertButton.innerText = "Convert to ℃";
         } else {
-            weatherApp.convertButton.innerText = "Convert to F";
+            weatherApp.convertButton.innerText = "Convert to ℉";
             weatherApp.tempLi.innerText = weatherApp.currentTemp;
         };
     });
