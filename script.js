@@ -2,8 +2,8 @@
 const weatherApp = {};
 
 // store the api Key
-weatherApp.apiKey = "DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy" 
-// weatherApp.apiKey = "iKLTvoFgSq9sc5BKM37ihFtikGNp351H" Rafay's back up key
+// weatherApp.apiKey = "DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy" Rittu's back up key
+weatherApp.apiKey = "iKLTvoFgSq9sc5BKM37ihFtikGNp351H"
 
 
 // ** ----------FUNCTION TO GET WEATHER DATA FOR TOP 50 CITIES----------** //
