@@ -13,10 +13,11 @@ weatherApp.getCities = () => {
     weatherApp.topFiftyUrl.search = new URLSearchParams({
         apikey: weatherApp.apiKey
     });
-
+    
     fetch(weatherApp.topFiftyUrl)
         .then((response) => {
             if (response.ok) {
+                console.log(response);
                 return response.json();
             } else {
                 // error handling
@@ -145,7 +146,7 @@ weatherApp.searchCity = (city, country) => {
         .then((citySearchResult) => {
             // 3 possibilities exist when searching for a city.  The city doesn't exist so the result will have a length of 0
             if (citySearchResult.length === 0) {
-                alert("No such city exists in the specified country.  Please check the spelling and try again")
+                alert("No such city exists in the specified country.  Check the spelling and try again")
             // if there is only 1 city that matches the search, call the getCityWeather function and pass in the location data
             } else if (citySearchResult.length === 1) {
                 weatherApp.getCityWeather(citySearchResult[0]);
@@ -330,6 +331,9 @@ weatherApp.displayWeatherStats = (passedCity, weatherData) => {
 
     weatherApp.cityFlagDiv.appendChild(nameOfCity);
 
+    //makes the weather stats scroll in to view
+    weatherApp.cityFlagDiv.scrollIntoView();
+
 }
 // ** ---------FUNCTION FOR DISPLAYING WEATHER STATS ENDS ---------** //
 
@@ -352,9 +356,9 @@ weatherApp.clearData = () => {
 // this function handles potential errors
 weatherApp.errorHandler = (error) => {
     if (error.name === "TypeError") {
-        alert("We apologize! WeatherApp is currently down. Please return after 24 hours!");
+        alert("We apologize! WeatherApp is currently down. Try again after 24 hours!");
     } else {
-        alert("Oops! We apologize, something went wrong! Please try again later");
+        alert("Oops! We apologize, something went wrong! Try again later");
     }
 }
 // ** ---------ERROR HANDLING FUNCTION ENDS ---------** //
@@ -382,7 +386,7 @@ weatherApp.allEventListeners = () => {
         // call the display weather stats function with the users selected city
         // if they haven't chosen a city, alert the user to select a city
         if (weatherApp.userCity === "choose") {
-            alert("Please select a city from the dropdown menu");
+            alert("Select a city from the dropdown menu");
         } else {
             weatherApp.displayWeatherStats(weatherApp.userCity, weatherApp.weatherData);
         }
@@ -438,15 +442,17 @@ weatherApp.allEventListeners = () => {
 
         // paragraph element creation and appending
         const citySearchP = document.createElement('p');
-        citySearchP.innerText = "Select a country from the dropdown menu and type the name of a city in the search bar below to get the weather forecast for any city in the world.";
+        
+        citySearchP.innerText = "Type the name of a city in the search bar below and select a country from the dropdown menu to get the weather forecast for any city in the world.";
+
         citySearchP.setAttribute('class', 'searchInstructions');
         weatherApp.citySearchDiv.appendChild(citySearchP);
 
 
-        // select element creation with a "Please choose country " option element appending
+        // select element creation with a "Choose country " option element appending
         weatherApp.countrySelect = document.createElement('select');
         const cityOptionDefault = document.createElement('option');
-        cityOptionDefault.innerText = "Please choose a country";
+        cityOptionDefault.innerText = "Choose a country";
         cityOptionDefault.setAttribute("value", "choose");
         weatherApp.countrySelect.appendChild(cityOptionDefault);
 
@@ -458,12 +464,9 @@ weatherApp.allEventListeners = () => {
             weatherApp.countrySelect.appendChild(countryOption);
         })
 
-        // append the select element to the parent div
-        weatherApp.citySearchDiv.appendChild(weatherApp.countrySelect)
-
         // create and append a label for the input search bar
         const citySearchLabel = document.createElement('label')
-        citySearchLabel.innerText = "Please enter a city name in the search bar:";
+        citySearchLabel.innerText = "Enter a city name in the search bar:";
         citySearchLabel.setAttribute('for', 'citySearchBar');
         weatherApp.citySearchDiv.appendChild(citySearchLabel);
 
@@ -473,6 +476,9 @@ weatherApp.allEventListeners = () => {
         weatherApp.citySearchBar.setAttribute('type', "text");
         weatherApp.citySearchBar.setAttribute('placeholder', "City Name");
         weatherApp.citySearchDiv.appendChild(weatherApp.citySearchBar);
+
+        // append the select element to the parent div
+        weatherApp.citySearchDiv.appendChild(weatherApp.countrySelect)
 
         // create a city search button and append it to the div
         weatherApp.citySearchButton = document.createElement('button');
@@ -491,9 +497,9 @@ weatherApp.allEventListeners = () => {
                 event.preventDefault();
                 // making sure the user selects a country and enters a city name in the input field
                 if (weatherApp.citySearchBar.value === "") {
-                    alert("Please enter a city name in the search bar");
+                    alert("Enter a city name in the search bar");
                 } else if (weatherApp.countrySelect.value === "choose") {
-                    alert("Please select a country from the dropdown menu");
+                    alert("Select a country from the dropdown menu");
                 } else {
                     // clear any radio buttons if they exist and call the citySearch function
                     if (weatherApp.allRadioButtons) {
@@ -516,9 +522,9 @@ weatherApp.allEventListeners = () => {
             // get the city name from the input and the country name from the dropdown menu and call the searchCity function
             // if either the country name is not selected or city name is not entered, alert the user to do so
             if (weatherApp.citySearchBar.value === "") {
-                alert("Please enter a city name in the search bar");
+                alert("Enter a city name in the search bar");
             } else if (weatherApp.countrySelect.value === "choose") {
-                alert("Please select a country from the dropdown menu");
+                alert("Select a country from the dropdown menu");
             } else {
                 // clear any radio buttons if they exist and call the citySearch function
                 if (weatherApp.allRadioButtons) {
@@ -528,6 +534,9 @@ weatherApp.allEventListeners = () => {
                     weatherApp.searchCity(weatherApp.citySearchBar.value, weatherApp.countrySelect.value)
                 }
             }
+
+            // when user clicks on city search button, city select drop down should return to default
+            weatherApp.dropDown.value = "choose";
         })
         // **--------- CITY SEARCH BUTTON EVENT LISTENER ENDS--------- ** //
     })
