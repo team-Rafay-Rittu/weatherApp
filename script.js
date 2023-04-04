@@ -2,8 +2,8 @@
 const weatherApp = {};
 
 // store the api Key
-// weatherApp.apiKey = "DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy" Rittu's back up key
-weatherApp.apiKey = "iKLTvoFgSq9sc5BKM37ihFtikGNp351H"
+weatherApp.apiKey = "DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy" 
+// weatherApp.apiKey = "iKLTvoFgSq9sc5BKM37ihFtikGNp351H" Rafay's back up key
 
 
 // ** ----------FUNCTION TO GET WEATHER DATA FOR TOP 50 CITIES----------** //
@@ -227,6 +227,7 @@ weatherApp.getCityWeather = (cityData) => {
             }
         })
         .then((cityWeather) => {
+            console.log(cityWeather);
             // the API result contains weatherData, we have to attach city name and country information to the weatherData
             cityWeather[0].Country = cityData.Country;
             cityWeather[0].EnglishName = cityData.EnglishName;
@@ -441,7 +442,9 @@ weatherApp.allEventListeners = () => {
 
         // paragraph element creation and appending
         const citySearchP = document.createElement('p');
+        
         citySearchP.innerText = "Type the name of a city in the search bar below and select a country from the dropdown menu to get the weather forecast for any city in the world.";
+
         citySearchP.setAttribute('class', 'searchInstructions');
         weatherApp.citySearchDiv.appendChild(citySearchP);
 
