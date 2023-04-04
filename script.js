@@ -17,7 +17,6 @@ weatherApp.getCities = () => {
     fetch(weatherApp.topFiftyUrl)
         .then((response) => {
             if (response.ok) {
-                console.log(response);
                 return response.json();
             } else {
                 // error handling
@@ -227,7 +226,6 @@ weatherApp.getCityWeather = (cityData) => {
             }
         })
         .then((cityWeather) => {
-            console.log(cityWeather);
             // the API result contains weatherData, we have to attach city name and country information to the weatherData
             cityWeather[0].Country = cityData.Country;
             cityWeather[0].EnglishName = cityData.EnglishName;
