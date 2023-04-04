@@ -2,14 +2,14 @@
 const weatherApp = {};
 
 // store the api Key
-weatherApp.apiKey = "DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy" 
-// weatherApp.apiKey = "iKLTvoFgSq9sc5BKM37ihFtikGNp351H" Rafay's back up key
+// weatherApp.apiKey = "DwK5l1uPAjh4A3DfJSFThmsSvZD1jQKy" Rittu's back up key
+weatherApp.apiKey = "iKLTvoFgSq9sc5BKM37ihFtikGNp351H"
 
 
 // ** ----------FUNCTION TO GET WEATHER DATA FOR TOP 50 CITIES----------** //
 weatherApp.getCities = () => {
     // api url to get top 50 cities weather data
-    weatherApp.topFiftyUrl = new URL("http://dataservice.accuweather.com/currentconditions/v1/topcities/50");
+    weatherApp.topFiftyUrl = new URL("https://dataservice.accuweather.com/currentconditions/v1/topcities/50");
     weatherApp.topFiftyUrl.search = new URLSearchParams({
         apikey: weatherApp.apiKey
     });
@@ -58,7 +58,7 @@ weatherApp.getCities = () => {
 weatherApp.getCountries = () => {
 
     //get all regions of the world FIRST with this api call
-    weatherApp.regionsURL = new URL("http://dataservice.accuweather.com/locations/v1/regions");
+    weatherApp.regionsURL = new URL("https://dataservice.accuweather.com/locations/v1/regions");
     weatherApp.regionsURL.search = new URLSearchParams ({
         apikey: weatherApp.apiKey
     })
@@ -81,7 +81,7 @@ weatherApp.getCountries = () => {
             jsonResult.forEach(region => {
 
                 // get all countries in a region with this api call
-                weatherApp.countriesURL = new URL(`http://dataservice.accuweather.com/locations/v1/countries/${region.ID}`);
+                weatherApp.countriesURL = new URL(`https://dataservice.accuweather.com/locations/v1/countries/${region.ID}`);
                 weatherApp.countriesURL.search = new URLSearchParams ({
                     apikey: weatherApp.apiKey
                 })
@@ -124,7 +124,7 @@ weatherApp.getCountries = () => {
 // ** ---------FUNCTION FOR SEARCHING FOR A CITY ---------** //
 weatherApp.searchCity = (city, country) => {
     // api call for searching for a city. Search parameters are "city country"
-    weatherApp.searchUrl = "http://dataservice.accuweather.com/locations/v1/cities/search";
+    weatherApp.searchUrl = "https://dataservice.accuweather.com/locations/v1/cities/search";
 
     weatherApp.citySearchUrl = new URL(weatherApp.searchUrl);
     weatherApp.citySearchUrl.search = new URLSearchParams({
@@ -211,7 +211,7 @@ weatherApp.searchCity = (city, country) => {
 weatherApp.getCityWeather = (cityData) => {
     // get the location data which was passed into this function when called and get the location Key
     // make the API call for weather data for a particular city with the location Key
-    weatherApp.cityWeatherURL = new URL(`http://dataservice.accuweather.com/currentconditions/v1/${cityData.Key}`);
+    weatherApp.cityWeatherURL = new URL(`https://dataservice.accuweather.com/currentconditions/v1/${cityData.Key}`);
     weatherApp.cityWeatherURL.search = new URLSearchParams ({
         apikey: weatherApp.apiKey
     })
